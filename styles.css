@@ -19,6 +19,7 @@ header {
     justify-content: flex-start;
     align-items: center;
     font-size: 22px;
+    text-align: center;
 }
 
 header a {
@@ -45,6 +46,7 @@ main {
     text-align: left;
     padding: 2rem;
     background-color: #ffffff;
+    animation: fadeIn 1s ease forwards;
 }
 
 main .left {
@@ -53,6 +55,17 @@ main .left {
 
 main .right {
     max-width: 50%;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 h1 {
@@ -64,15 +77,39 @@ h1 {
 h2 {
     margin-bottom: 20px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2em;
     color: #256634;
     font-weight: 700;
+    animation: fadeIn 1s ease forwards;
 }
 
 p {
-    font-size: 1rem;
-    margin: 1rem 0;
+    padding: 10px 20px;
+    margin: 0 auto 20px;
+    max-width: 800px;
+    font-size: 1.1em;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     color: #555;
+    
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}    
+
+
+h2:hover, p:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease; 
 }
 
 button {
@@ -116,7 +153,7 @@ main .right img {
     float: left; 
 }
 
-storiesContainer {
+.storiesContainer {
     display: flex;
     flex-direction: column; 
     flex-wrap: wrap; 
