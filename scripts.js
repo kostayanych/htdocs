@@ -3,70 +3,57 @@
 // Base URL for API
 const API_BASE = "http://localhost:3000/api";
 
-// User registration function
-async function registerUser(userData) {
-    try {
-        const response = await fetch(`${API_BASE}/users/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-        });
-        const result = await response.json();
-        if (response.ok) {
-            alert("Registration successful!");
-        } else {
-            alert(`Error: ${result.message}`);
-        }
-    } catch (error) {
-        console.error("Error during registration:", error);
-    }
-}
 
-// User login function
-async function loginUser(credentials) {
-    try {
-        const response = await fetch(`${API_BASE}/users/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-        });
-        const result = await response.json();
-        if (response.ok) {
-            alert("Login successful!");
-            localStorage.setItem("token", result.token); // Save token for authenticated requests
-        } else {
-            alert(`Error: ${result.message}`);
-        }
-    } catch (error) {
-        console.error("Error during login:", error);
-    }
-}
 
 // Fetch and display stories
-async function fetchStories() {
+async function loadStories(filters = {}) {
     try {
-        const response = await fetch(`${API_BASE}/stories`);
+        // Создаем строку параметров для фильтров
+        const params = new URLSearchParams(filters).toString();
+        const response = await fetch(`http://localhost:3000/api/stories/getByFilters?${params}`);
+        console.log(`Запрос к API: /api/stories/getByFilters?${params}`);
+
+
+        if (!response.ok) {
+            throw new Error('Ошибка сети: ' + response.status);
+        }
+
         const stories = await response.json();
-        const storiesContainer = document.getElementById("content");
-        storiesContainer.innerHTML = stories.map(story => `
-            <div class="story">
-                <h2>${story.title}</h2>
-                <p>${story.desc}</p>
-                <small>${new Date(story.postedDate).toLocaleDateString()}</small>
-            </div>
-        `).join("");
+        const storiesContainer = document.getElementById('storiesContainer');
+        storiesContainer.innerHTML = ''; // Очистка контейнера перед загрузкой
+
+        if (stories.length === 0) {
+           storiesContainer.innerHTML = '<p>Истории не найдены.</p>';
+        }
+
+        stories.forEach(story => {
+            const storyElement = document.createElement('div');
+            storyElement.classList.add('storyCard')
+            storyElement.innerHTML = `
+                <h3>${story.name}</h3>
+                <p>Автор: ${story.author.name} ${story.author.surname}</p>
+                <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
+                <p>Описание: ${story.desc}</p>
+                <div class="buttonContainer">
+                    <span class="likeCount" id="likeCount-${story._id}">${story.likesCount}</span>
+                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike(${story._id})" style="cursor: pointer; width: 20px; height: 20px;"></img>
+                    <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length}</span>
+                    <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment(${story._id})" style="cursor: pointer; width: 20px; height: 20px;"></img>
+                </div>
+            `;
+            storiesContainer.appendChild(storyElement);
+        });
     } catch (error) {
-        console.error("Error fetching stories:", error);
+        console.error('Ошибка загрузки историй:', error);
     }
 }
 
-// Event listeners (example usage)
-document.addEventListener("DOMContentLoaded", () => {
-    if (window.location.pathname === "/stories.html") {
-        fetchStories();
-    }
-});
+function toggleLike(storyId) {
+    fetch(`http://localhost:3000/api/stories/updateById/${storyId}`, {method: `PUT`})
+        .then(response => response.json())
+        .then(data => {
+            const likeCountElement = document.getElementById(`likeCount-${storyId}`);
+            likeCountElement.textContent = `${data.newLikesCount}`;
+        })
+        .catch(error => console.error('Ошибка при обновлении лайков:', error));
+}
