@@ -1,0 +1,149 @@
+/* Общие стили */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: white;
+    padding: 1rem 2rem;
+    display: block;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 22px;
+}
+
+header a {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header a:first-child {
+    margin-left: 0;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+main {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    text-align: left;
+    padding: 2rem;
+    background-color: #ffffff;
+}
+
+main .left {
+    max-width: 50%;
+}
+
+main .right {
+    max-width: 50%;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #871e28;
+    font-weight: 900;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #256634;
+    font-weight: 700;
+}
+
+p {
+    font-size: 1rem;
+    margin: 1rem 0;
+    color: #555;
+}
+
+button {
+    padding: 0.8rem 2rem;
+    margin: 0.5rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+button.register {
+    background-color: #871e28;
+    color: white;
+    font-weight: bold;
+}
+
+button.register:hover {
+    background-color: #721820;
+}
+
+button.login {
+    background-color: white;
+    color: #871e28;
+    border: 2px solid #871e28;
+}
+
+button.login:hover {
+    background-color: #f8f8f8;
+}
+
+/* Логотип */
+main .right img {
+    max-width: 80%;
+    height: auto;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    float: left; 
+}
+
+storiesContainer {
+    display: flex;
+    flex-direction: column; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    padding: 1em; 
+    margin-top: auto;
+}
+
+.storyCard {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    margin: 1rem; 
+    padding: 1rem; 
+    width: calc(300px - 2rem); 
+    transition: transform 0.2s; 
+}
+
+.storyCard:hover {
+    transform: scale(1.05); 
+}
+
+.storyCard h3 {
+    margin: 0 0 10px; 
+}
+
+.storyCard p {
+    margin: 5px 0; 
+}

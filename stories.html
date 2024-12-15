@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лента историй</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        async function loadStories(filters = {}) {
+            try {
+                // Создаем строку параметров для фильтров
+                const params = new URLSearchParams(filters).toString();
+                const response = await fetch(`http://localhost:3000/api/stories/getByFilters?${params}`);
+                console.log(`Запрос к API: /api/stories/getByFilters?${params}`);
+   
+
+                if (!response.ok) {
+                    throw new Error('Ошибка сети: ' + response.status);
+                }
+    
+                const stories = await response.json();
+                const storiesContainer = document.getElementById('storiesContainer');
+                storiesContainer.innerHTML = ''; // Очистка контейнера перед загрузкой
+
+                if (stories.length === 0) {
+                   storiesContainer.innerHTML = '<p>Истории не найдены.</p>';
+                }
+
+                stories.forEach(story => {
+                    const storyElement = document.createElement('div');
+                    storyElement.classList.add('storyCard')
+                    storyElement.innerHTML = `
+                        <h3>${story.name}</h3>
+                        <p>Автор: ${story.author.name} ${story.author.surname}</p>
+                        <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
+                        <p>Лайков: ${story.likesCount}</p>
+                        <p>${story.comments.length} комментариев</p>
+                    `;
+                    storiesContainer.appendChild(storyElement);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки историй:', error);
+            }
+        }
+    
+        window.onload = () => {
+            // Пример фильтров, которые можно передать в функцию
+            const filters = {
+                //name: 'story', // Фильтр по имени истории
+            };
+            loadStories(filters); // Загружаем истории с фильтрами при загрузке страницы
+        };
+
+        document.getElementById('searchButton').addEventListener('click', async function () {
+            const author = document.getElementById('searchInput').value;
+            const filters = {
+                author: `${author}`, // Фильтр по имени истории
+            };
+            loadStories(filters)           
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Лента историй</h1>
+        <nav>
+                <a href="profile.html">Профиль</a>
+                <a href="index.html">Выход</a>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Истории:</h2>
+        <input type="text" id="searchInput" placeholder="Поиск по автору истории"/>
+        <button id="searchButton">Поиск</button>
+        <div id="storiesContainer" class="storiesContainer">
+            
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Все права защищены.</p>
+    </footer>
+</body>
+</html>
