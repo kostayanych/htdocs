@@ -5,60 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль пользователя</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="scripts.js"></script>
+    <script src="scripts.js" defer></script>
 </head>
 <body onload="checkAuth(); loadProfile();">
     <header>
         <h1>Профиль пользователя</h1>
         <nav>
             <a href="stories.html">Лента историй</a>
+            <a href="index.html">Главная</a>
+            <button class="logoutButton" onclick="logout()">Выйти</button>
         </nav>
     </header>
     <main>
-        <h2>Информация о пользователе</h2>
-        <div id="profile">
-            <p><strong>Имя:</strong> <span id="userName"></span></p>
-            <p><strong>Фамилия:</strong> <span id="userSurname"></span></p>
-            <p><strong>Email:</strong> <span id="userEmail"></span></p>
-            <p><strong>Должность:</strong> <span id="userPosition"></span></p>
-            <p><strong>Дата рождения:</strong> <span id="userBirthday"></span></p>
-        </div>
-        <button onclick="logout()">Выход</button>
+        <section class="profileContainer">
+            <h2>Информация о пользователе</h2>
+            <div class="profileCard">
+                <p><strong>Имя:</strong> <span id="userName"></span>
+                    <button class="editButton" onclick="editField('userName', 'name')">Изменить</button>
+                </p>
+                <p><strong>Фамилия:</strong> <span id="userSurname"></span>
+                    <button class="editButton" onclick="editField('userSurname', 'surname')">Изменить</button>
+                </p>
+                <p><strong>Email:</strong> <span id="userEmail"></span>
+                    <button class="editButton" onclick="editField('userEmail', 'email')">Изменить</button>
+                </p>
+                <p><strong>Должность:</strong> <span id="userPosition"></span>
+                    <button class="editButton" onclick="editField('userPosition', 'position')">Изменить</button>
+                </p>
+                <p><strong>Дата рождения:</strong> <span id="userBirthday"></span>
+                    <button class="editButton" onclick="editField('userBirthday', 'birthday')">Изменить</button>
+                </p>
+            </div>
+        </section>
+        <script>
+            function formatDate(dateString){
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+    
+                return `${day}.${month}.${year}`
+            }
+    
+            function loadProfile() {
+                // Получаем данные из localStorage
+                const name = localStorage.getItem('name') || 'Не указано';
+                const surname = localStorage.getItem('surname') || 'Не указано';
+                const email = localStorage.getItem('email') || 'Не указано';
+                const birthday = localStorage.getItem('birthday') || 'Не указано';
+    
+                const positionObj = localStorage.getItem('position');
+                let positionText = 'Не указано';
+                if (positionObj) {
+                   // const positionObj = JSON.parse(positionData);
+                    positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
+                }
+                // Заполняем профиль
+                document.getElementById('userName').textContent = name;
+                document.getElementById('userSurname').textContent = surname;
+                document.getElementById('userEmail').textContent = email;
+                document.getElementById('userPosition').textContent = positionText;
+                document.getElementById('userBirthday').textContent = formatDate(birthday);
+            }
+        </script>
     </main>
     <footer>
-        <p>&copy; 2024 Все права защищены.</p>
+        <p>&copy; 2024 Искренний сервис. Все права защищены.</p>
     </footer>
-
-    <script>
-        function formatDate(dateString){
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-
-            return `${day}.${month}.${year}`
-        }
-
-        function loadProfile() {
-            // Получаем данные из localStorage
-            const name = localStorage.getItem('name') || 'Не указано';
-            const surname = localStorage.getItem('surname') || 'Не указано';
-            const email = localStorage.getItem('email') || 'Не указано';
-            const birthday = localStorage.getItem('birthday') || 'Не указано';
-
-            const positionObj = localStorage.getItem('position');
-            let positionText = 'Не указано';
-            if (positionObj) {
-               // const positionObj = JSON.parse(positionData);
-                positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
-            }
-            // Заполняем профиль
-            document.getElementById('userName').textContent = name;
-            document.getElementById('userSurname').textContent = surname;
-            document.getElementById('userEmail').textContent = email;
-            document.getElementById('userPosition').textContent = positionText;
-            document.getElementById('userBirthday').textContent = formatDate(birthday);
-        }
-    </script>
 </body>
 </html>

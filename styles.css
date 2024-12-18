@@ -231,3 +231,25 @@ main .right img {
 .searchButton:hover {
     background-color: #871e28; 
 }
+
+.descriptionContainer {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.descriptionContainer span {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #256634;
+}
+
+.descriptionContainer p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+}

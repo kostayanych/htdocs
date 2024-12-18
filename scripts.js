@@ -33,7 +33,10 @@ async function loadStories(filters = {}) {
                 <h3>${story.name}</h3>
                 <p>Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</p>
                 <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
-                <p>Описание: ${story.desc}</p>
+                <div class="descriptionContainer">
+                    <span>Описание:</span>
+                        <p>${story.desc}</p>
+                </div>
                 <div class="buttonContainer">
                     <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
                     <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike(${story._id}, ${story.likesCount})" style="cursor: pointer; width: 20px; height: 20px;">
