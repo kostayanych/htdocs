@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать историю</title>
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <style>
+        .cke_notifications_area {
+        display: none !important;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #800020;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #046A38;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #03572E;
+        }
+    </style>
+</head>
+<body>
+    <h1>Создать новую историю</h1>
+    <form id="createStoryForm" method="post" action="http://localhost:3000/api/stories/create">
+        <input name="title" type="text" placeholder="Название истории" required>
+        <textarea name="content" id="editor" placeholder="Текст истории" required></textarea>
+        <button type="submit">Опубликовать</button>
+    </form>
+
+    <script>
+        CKEDITOR.editorConfig = function( config ) {
+            config.versionCheck = false;
+        };
+        CKEDITOR.replace('editor'); // Инициализация CKEditor
+        document.getElementById('createStoryForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            // Получаем данные из формы
+            const title = this.title.value; // Название истории
+            const content = CKEDITOR.instances.editor.getData(); // Текст истории
+
+            // Выводим данные в консоль (можно заменить на любой другой способ обработки)
+            console.log('Название истории:', title);
+            console.log('Текст истории:', content);
+            const today = new Date();
+            const formattedDate = today.toISOString();
+            const name = localStorage.getItem('name');
+            const surname = localStorage.getItem('surname');
+            console.log('Имя', name);
+            console.log('Фамилия', surname);
+            const storyData = {
+                "name": title,
+                "date": formattedDate,
+                "photo": null,
+                "video": null,
+                "author": {
+                    "name": name,
+                    "surname": surname,
+                    "lastName": "Павлович",
+                    "position": {
+                        "department": "test department",
+                        "position": "test position",
+                        "cmd": "test cmd"
+                    }
+                },
+                "likesCount": 0,
+                "comments": [],
+                "verified": true,
+                "desc": content
+            };
+
+            createStory(storyData)
+            alert('История успешно создана');
+            window.location.href = 'stories.html';
+    });
+
+    async function createStory(storyData) {
+        try {
+            const response = await fetch('http://localhost:3000/api/stories/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(storyData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Story успешно создана:', data);
+        } catch (error) {
+            console.error('Ошибка при создании истории:', error);
+        }
+    }
+    
+        
+    </script>
+</body>
+</html>

@@ -4,14 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Логин</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Заголовок */
+        h1 {
+            color: #800020; /* Бордовый цвет */
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        /* Форма */
+        form {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #046A38; /* Темно-зеленый цвет */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #03572E; /* Темно-зеленый цвет при наведении */
+        }
+
+        /* Подпись */
+        .footer {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
+    <!-- Заголовок -->
+    <h1>Искренний сервис</h1>
+
+    <!-- Форма входа -->
     <form id="loginForm" method="post" enctype="multipart/form-data" action="http://localhost:3000/api/auth/login">
         <input name="email" type="text" placeholder="Email" required>
         <input name="password" type="password" placeholder="Пароль" required>
-        <button type="submit">Отправить</button>
+        <button type="submit">Войти</button>
     </form>
 
+    <!-- Подпись -->
+    <div class="footer">
+        © 2024 Искренний сервис. Все права защищены.
+    </div>
+
+    <!-- Скрипт для обработки формы -->
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Отменяем стандартное поведение формы
@@ -24,8 +98,16 @@
 
             if (response.ok) {
                 const data = await response.json();
-                const token = data.token; // Предполагая, что сервер возвращает токен
+                
+                const token = data.jwt; // Предполагается, что сервер возвращает токен
                 localStorage.setItem('jwt', token); // Сохраняем токен
+                localStorage.setItem('email', data.email);
+                localStorage.setItem('name', data.name);
+                localStorage.setItem('surname', data.surname);
+                localStorage.setItem('role', data.role);
+                localStorage.setItem('position', data.position);
+                localStorage.setItem('birthday', data.birthday);
+                console.log(localStorage)
                 alert('Успешный вход!');
                 window.location.href = 'profile.html';
             } else {

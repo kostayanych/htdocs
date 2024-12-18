@@ -5,70 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль пользователя</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        async function loadProfile() {
-            const response = await fetch('/api/users'); // Получаем пользователей из API
-            const users = await response.json();
-            if (users.length > 0) {
-                const user = users[0]; // Предполагаем, что пользователь уже существует
-                document.getElementById("displayUsername").innerText = user.username;
-                document.getElementById("displayEmail").innerText = user.email;
-                document.getElementById("displayDate").innerText = new Date(user.registrationDate).toLocaleDateString();
-            }
-        }
-
-        async function updateProfile() {
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-
-            const response = await fetch('/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password: "default" }) // Пароль можно генерировать или использовать как-то иначе
-            });
-
-            if (response.ok) {
-                alert('Профиль обновлен');
-                loadProfile(); // Обновляем отображение
-            } else {
-                alert('Ошибка при обновлении профиля');
-            }
-        }
-
-        window.onload = loadProfile; // Загружаем профиль при загрузке страницы
-    </script>
+    <script src="scripts.js"></script>
 </head>
-<body>
+<body onload="checkAuth(); loadProfile();">
     <header>
         <h1>Профиль пользователя</h1>
         <nav>
-            <ul>
-                <li><a href="stories.html">Лента историй</a></li>
-                <li><a href="logout.html">Выход</a></li>
-            </ul>
+            <a href="stories.html">Лента историй</a>
         </nav>
     </header>
     <main>
-        <h2>Введите свои данные:</h2>
-        <form onsubmit="updateProfile(); return false;">
-            <label for="username">Имя пользователя:</label>
-            <input type="text" id="username" required>
-            
-            <label for="email">Электронная почта:</label>
-            <input type="email" id="email" required>
-            
-            <button type="submit">Сохранить</button>
-        </form>
-        
-        <h3>Информация о вас:</h3>
-        <p>Имя: <span id="displayUsername">Не указано</span></p>
-        <p>Электронная почта: <span id="displayEmail">Не указано</span></p>
-        <p>Дата регистрации: <span id="displayDate">Не указано</span></p>
+        <h2>Информация о пользователе</h2>
+        <div id="profile">
+            <p><strong>Имя:</strong> <span id="userName"></span></p>
+            <p><strong>Фамилия:</strong> <span id="userSurname"></span></p>
+            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+            <p><strong>Должность:</strong> <span id="userPosition"></span></p>
+            <p><strong>Дата рождения:</strong> <span id="userBirthday"></span></p>
+        </div>
+        <button onclick="logout()">Выход</button>
     </main>
     <footer>
         <p>&copy; 2024 Все права защищены.</p>
     </footer>
+
+    <script>
+        function formatDate(dateString){
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+
+            return `${day}.${month}.${year}`
+        }
+
+        function loadProfile() {
+            // Получаем данные из localStorage
+            const name = localStorage.getItem('name') || 'Не указано';
+            const surname = localStorage.getItem('surname') || 'Не указано';
+            const email = localStorage.getItem('email') || 'Не указано';
+            const birthday = localStorage.getItem('birthday') || 'Не указано';
+
+            const positionObj = localStorage.getItem('position');
+            let positionText = 'Не указано';
+            if (positionObj) {
+               // const positionObj = JSON.parse(positionData);
+                positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
+            }
+            // Заполняем профиль
+            document.getElementById('userName').textContent = name;
+            document.getElementById('userSurname').textContent = surname;
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userPosition').textContent = positionText;
+            document.getElementById('userBirthday').textContent = formatDate(birthday);
+        }
+    </script>
 </body>
 </html>

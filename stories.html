@@ -5,55 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Лента историй</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="scripts.js"></script>
-    <script>
-        window.onload = () => {
-            const token = localStorage.getItem('authToken'); // Или используйте sessionStorage
+    <script src="scripts.js" defer></script> <!-- Убедитесь, что scripts.js загружается -->
+    <style>
+        /* Добавляем базовые стили */
+        .cke_notifications_area {
+        display: none !important;
+        }
+        .story {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
 
-            if (!token) {
-            // Если токена нет, перенаправляем на страницу входа
-                window.location.href = 'login.html'; // Укажи правильный путь к странице входа
-                return; // Прекращаем выполнение скрипта
-            }
-            // Пример фильтров, которые можно передать в функцию
-            const filters = {
-                //name: 'story', // Фильтр по имени истории
-            };
-            loadStories(filters); // Загружаем истории с фильтрами при загрузке страницы
-        
+        .story img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
 
-            document.getElementById('searchButton').addEventListener('click', async function () {
-                const author = document.getElementById('searchInputName').value;
-                const title = document.getElementById('searchInputTitle').value;
-                const filters = {
-                    author: `${author}`, // Фильтр по автору
-                    title: `${title}`,
-                };
-                loadStories(filters)           
-            });
-        };
-    </script>
+        .filters {
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
 <main>
     <header>
         <h1>Лента историй</h1>
         <nav>
-                <a href="profile.html">Профиль</a>
-                <a href="index.html">Выход</a>
+            <a href="profile.html">Профиль</a>
         </nav>
     </header>
-        <h2>Истории:</h2>
-        <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории"/>
-        <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории"/>
-        <button id="searchButton" class="searchButton">Поиск</button>
-        <div id="storiesContainer" class="storiesContainer">
-            
-        </div>
+    <section>
+        <button id="createStoryButton" class="createStoryButton" style="
+            background-color: #046A38; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 10px 0; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            border-radius: 5px;">
+            Создать историю
+        </button>
+    </section>
+    <h2>Истории:</h2>
+    
+    <div class="filters">
+        <h3>Сортировать по лайкам:</h3>
+        <button id="filterLikesAscButton">По возрастанию</button>
+        <button id="filterLikesDescButton">По убыванию</button>
+        
+    </div>
+
+    <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории"/>
+    <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории"/>
+    <button id="searchButton" class="searchButton">Поиск</button>
+    
+    <div id="storiesContainer" class="storiesContainer"></div>
     
     <footer>
         <p>&copy; 2024 Все права защищены.</p>
     </footer>
 </main>
+
+<script>
+    window.onload = () => {
+        checkAuth(); // Проверка авторизации
+        loadStories(); // Загружаем истории без фильтров изначально
+
+        // Обработчики событий для сортировки
+        document.getElementById('filterLikesAscButton').addEventListener('click', () => loadStoriesby({ sort: 'likesCount', order: 'asc' }));
+        document.getElementById('filterLikesDescButton').addEventListener('click', () => loadStoriesby({ sort: 'likesCount', order: 'desc' }));
+
+        // Функциональность поиска
+        document.getElementById('searchButton').addEventListener('click', async function () {
+            const author = document.getElementById('searchInputName').value;
+            const title = document.getElementById('searchInputTitle').value;
+            const filters = {
+                author: author, // Фильтр по автору
+                title: title,
+            };
+            loadStories(filters);
+        });
+                            // Перенаправление на страницу создания истории
+        document.getElementById('createStoryButton').addEventListener('click', function () {
+                window.location.href = 'create_story.html'; // Страница создания истории
+            });
+    };
+
+    async function loadStoriesby(filters = {}) {
+        const response = await fetch('http://localhost:3000/api/stories/getByFilters?'); // Получаем истории из вашего API
+        const stories = await response.json(); // Преобразуем ответ в JSON
+
+        // Фильтруем истории на основе переданных фильтров
+        let filteredStories = stories;
+
+        // Сортировка по лайкам или комментариям
+        if (filters.sort) {
+            filteredStories = filteredStories.sort((a, b) => {
+                const factor = filters.order === 'asc' ? 1 : -1; // Определяем направление сортировки
+                return (a[filters.sort] - b[filters.sort]) * factor;
+            });
+        }
+
+        // Отображение историй
+        const storiesContainer = document.getElementById('storiesContainer');
+        storiesContainer.innerHTML = ''; // Очищаем предыдущие истории
+
+
+        filteredStories.forEach(story => {
+            const storyElement = document.createElement('div');
+            storyElement.classList.add('storyCard');
+            storyElement.innerHTML = `
+                <h3>${story.name}</h3>
+                <p>Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</p>
+                <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
+                <p>Описание: ${story.desc}</p>
+                <div class="buttonContainer">
+                    <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
+                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike(${story._id})" style="cursor: pointer; width: 20px; height: 20px;">
+                    <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length || 0}</span>
+                    <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment(${story._id})" style="cursor: pointer; width: 20px; height: 20px;">
+                </div>
+            `;
+            storiesContainer.appendChild(storyElement);
+        });
+    }
+</script>
 </body>
 </html>
