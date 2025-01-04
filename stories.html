@@ -83,10 +83,15 @@
         document.getElementById('searchButton').addEventListener('click', async function () {
             const author = document.getElementById('searchInputName').value;
             const title = document.getElementById('searchInputTitle').value;
-            const filters = {
-                author: author, // Фильтр по автору
-                title: title,
-            };
+            const filters = {};
+
+            if (author) {
+                filters.author = author; // Фильтр по автору
+            }
+
+            if (title) {
+                filters.name = title; // Фильтр по заголовку
+            }
             loadStories(filters);
         });
                             // Перенаправление на страницу создания истории

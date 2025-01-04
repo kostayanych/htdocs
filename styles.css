@@ -3,17 +3,27 @@ html, body {
     height: 100%;
 }
 
+@font-face { 
+    font-family: "CirceRegular";
+    src: url("../fonts/CirceRegular/CirceRegular.eot");
+    src: url("../fonts/CirceRegular/CirceRegular.eot?#iefix")format("embedded-opentype"),
+    url("../fonts/CirceRegular/CirceRegular.woff") format("woff"),
+    url("../fonts/CirceRegular/CirceRegular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'CirceRegular', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f8f8;
+    background-color: #800036;
     color: #333;
     text-align: center;
 }
 
 header {
-    background-color: white;
+    background-color: #800036;
     padding: 1rem 2rem;
     display: block;
     justify-content: flex-start;
@@ -25,7 +35,7 @@ header {
 header a {
     margin-left: 1rem;
     margin-right: 1rem;
-    color: #333;
+    color: white;
     text-decoration: none;
     font-weight: bold;
 }
@@ -45,7 +55,7 @@ main {
     height: auto;
     text-align: center;
     padding: 2rem;
-    background-color: #ffffff;
+    background-color: #800036;
     animation: fadeIn 1s ease forwards;
 }
 
@@ -70,7 +80,7 @@ main .right {
 
 h1 {
     font-size: 2rem;
-    color: #871e28;
+    color: #256634;
     font-weight: 900;
 }
 
@@ -88,10 +98,7 @@ p {
     margin: 0 auto 20px;
     max-width: 800px;
     font-size: 1.1em;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    color: #555;
+    color: whitesmoke;
     
 }
 

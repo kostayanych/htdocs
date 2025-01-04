@@ -1,7 +1,7 @@
 // scripts.js
 
 // Base URL for API
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = "http://localhost:5500/api";
 
 // Fetch and display stories
 async function loadStories(filters = {}) {
@@ -39,7 +39,7 @@ async function loadStories(filters = {}) {
                 </div>
                 <div class="buttonContainer">
                     <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
-                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike(${story._id}, ${story.likesCount})" style="cursor: pointer; width: 20px; height: 20px;">
+                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike('${story._id}', ${story.likesCount})" style="cursor: pointer; width: 20px; height: 20px;">
                     <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length || 0}</span>
                     <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment(${story._id})" style="cursor: pointer; width: 20px; height: 20px;">
                 </div>
@@ -51,30 +51,21 @@ async function loadStories(filters = {}) {
     }
 }
 
-function toggleLike(storyId, likesCount) {
-    console.log(`Запрос на обновление лайков для истории с ID: ${storyId}`);
-    const data = {
-        likesCount: likesCount
-    };
-    fetch(`http://localhost:3000/api/stories/updateById/${storyId}`, {
+async function toggleLike(storyId, currentLikesCount) {
+    console.log(`ID истории: ${storyId}, Текущее количество лайков: ${currentLikesCount}`);
+    fetch(`http://localhost:5500/api/stories/updateById/${storyId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ likesCount: currentLikesCount + 1 }) // Увеличиваем лайки
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log('Success:', data);
+        const likeCountElement = document.getElementById(`likeCount-${storyId}`);
+        likeCountElement.textContent = data.newLikesCount || currentLikesCount + 1;
     })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    //.catch(error => console.error('Ошибка при обновлении лайков:', error));
 }
 
 function checkAuth() {
