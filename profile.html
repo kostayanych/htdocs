@@ -6,6 +6,18 @@
     <title>Профиль пользователя</title>
     <link rel="stylesheet" href="profile.css">
     <script src="scripts.js" defer></script>
+    <style>
+        /* Простой стиль для модального окна */
+        #editModal {
+            display: none; /* Скрываем по умолчанию */
+            position: absolute; /* Абсолютное позиционирование */
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Обеспечиваем, что окно будет сверху */
+        }
+    </style>
 </head>
 <body onload="checkAuth(); loadProfile();">
     <header>
@@ -21,32 +33,49 @@
             <h2>Информация о пользователе</h2>
             <div class="profileCard">
                 <p><strong>Имя:</strong> <span id="userName"></span>
-                    <button class="editButton" onclick="editField('userName', 'name')">Изменить</button>
+                    <button class="editButton" onclick="editField('userName', 'name', event)">Изменить</button>
                 </p>
                 <p><strong>Фамилия:</strong> <span id="userSurname"></span>
-                    <button class="editButton" onclick="editField('userSurname', 'surname')">Изменить</button>
+                    <button class="editButton" onclick="editField('userSurname', 'surname', event)">Изменить</button>
                 </p>
                 <p><strong>Email:</strong> <span id="userEmail"></span>
-                    <button class="editButton" onclick="editField('userEmail', 'email')">Изменить</button>
+                    <button class="editButton" onclick="editField('userEmail', 'email', event)">Изменить</button>
                 </p>
                 <p><strong>Должность:</strong> <span id="userPosition"></span>
-                    <button class="editButton" onclick="editField('userPosition', 'position')">Изменить</button>
+                    <button class="editButton" onclick="editPosition(event)">Изменить</button>
                 </p>
                 <p><strong>Дата рождения:</strong> <span id="userBirthday"></span>
-                    <button class="editButton" onclick="editField('userBirthday', 'birthday')">Изменить</button>
+                    <button class="editButton" onclick="editField('userBirthday', 'birthday', event)">Изменить</button>
                 </p>
             </div>
         </section>
+
+        <!-- Модальное окно для ввода новых данных -->
+        <div id="editModal">
+            <h3>Редактировать должность</h3>
+            <label for="department">Департамент:</label>
+            <input type="text" id="department" placeholder="Введите департамент" />
+            <label for="cmd">ЦМД:</label>
+            <input type="text" id="cmd" placeholder="Введите ЦМД" />
+            <label for="position">Должность:</label>
+            <input type="text" id="position" placeholder="Введите должность" />
+            <button id="saveButton">Сохранить</button>
+            <button id="cancelButton" onclick="closeModal()">Отмена</button>
+        </div>
+
         <script>
+            let currentField; // Хранит, какой именно элемент мы редактируем
+            let currentFieldType; // Хранит тип поля (name, surname и т.д.)
+
             function formatDate(dateString){
                 const date = new Date(dateString);
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const year = date.getFullYear();
     
-                return `${day}.${month}.${year}`
+                return `${day}.${month}.${year}`;
             }
-    
+
             function loadProfile() {
                 // Получаем данные из localStorage
                 const name = localStorage.getItem('name') || 'Не указано';
@@ -54,19 +83,100 @@
                 const email = localStorage.getItem('email') || 'Не указано';
                 const birthday = localStorage.getItem('birthday') || 'Не указано';
     
-                const positionObj = localStorage.getItem('position');
+                const positionObj = JSON.parse(localStorage.getItem('position')) || {}; // Заменено на JSON.parse
                 let positionText = 'Не указано';
-                if (positionObj) {
-                   // const positionObj = JSON.parse(positionData);
+                
+                // Проверка на наличие данных в positionObj
+                if (positionObj && positionObj.department && positionObj.position && positionObj.cmd) {
                     positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
+                } else {
+                    positionText = 'Не указано'; // Если данные отсутствуют, показываем "Не указано"
                 }
+
                 // Заполняем профиль
                 document.getElementById('userName').textContent = name;
                 document.getElementById('userSurname').textContent = surname;
                 document.getElementById('userEmail').textContent = email;
                 document.getElementById('userPosition').textContent = positionText;
                 document.getElementById('userBirthday').textContent = formatDate(birthday);
+                console.log(localStorage);
             }
+
+            function editField(fieldId, fieldType, event) {
+                currentField = fieldId;
+                currentFieldType = fieldType;
+                const currentValue = document.getElementById(fieldId).textContent;
+                document.getElementById('newValue').value = currentValue;
+
+                // Получаем координаты кнопки и позиционируем модальное окно
+                const buttonRect = event.target.getBoundingClientRect();
+                const modal = document.getElementById('editModal');
+                modal.style.left = `${buttonRect.left}px`;
+                modal.style.top = `${buttonRect.bottom + window.scrollY}px`; // Позиционируем ниже кнопки
+                modal.style.display = 'block'; // Показываем модальное окно
+            }
+
+            function editPosition(event) {
+                // Получаем текущие значения позиции и заполняем поля модального окна
+                const positionObj = JSON.parse(localStorage.getItem('position')) || {};
+                document.getElementById('department').value = positionObj.department || '';
+                document.getElementById('cmd').value = positionObj.cmd || '';
+                document.getElementById('position').value = positionObj.position || '';
+
+                // Получаем координаты кнопки и позиционируем модальное окно
+                const buttonRect = event.target.getBoundingClientRect();
+                const modal = document.getElementById('editModal');
+                modal.style.left = `${buttonRect.left}px`;
+                modal.style.top = `${buttonRect.bottom + window.scrollY}px`; // Позиционируем ниже кнопки
+                modal.style.display = 'block'; // Показываем модальное окно
+            }
+
+            function closeModal() {
+                document.getElementById('editModal').style.display = 'none'; // Скрываем модальное окно
+            }
+
+            document.getElementById('saveButton').addEventListener('click', async () => {
+                const department = document.getElementById('department').value;
+                const cmd = document.getElementById('cmd').value;
+                const position = document.getElementById('position').value;
+
+                const newPosition = {
+                    department,
+                    cmd,
+                    position,
+                };
+
+                await updateUser('position', newPosition);
+                closeModal();
+            });
+
+            const updateUser = async (fieldType, newValue) => {
+                const userId = localStorage.getItem('id'); // Предположим, что вы храните userId в localStorage
+                const userData = {};
+                userData[fieldType] = newValue; // Подготавливаем данные для обновления
+
+                try {
+                    const response = await fetch(`http://localhost:5500/api/users/updateById/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Ошибка при обновлении пользователя');
+                    }
+
+                    // Обновляем данные в localStorage и на странице
+                    localStorage.setItem('position', JSON.stringify(newValue)); // Сериализуем объект
+                    document.getElementById('userPosition').textContent = `${newValue.department || 'Не указано'}, ${newValue.position || 'Не указано'}, ${newValue.cmd || 'Не указано'}`;
+                    alert('Данные пользователя успешно обновлены!');
+                } catch (error) {
+                    console.error(error);
+                    alert('Произошла ошибка: ' + error.message);
+                }
+            };
         </script>
     </main>
     <footer>

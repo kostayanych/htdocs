@@ -89,27 +89,35 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Отменяем стандартное поведение формы
-
+    
             const formData = new FormData(this);
             const response = await fetch(this.action, {
                 method: this.method,
                 body: formData
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 console.log(data)
                 const token = data.jwt; // Предполагается, что сервер возвращает токен
                 localStorage.setItem('jwt', token); // Сохраняем токен
+                localStorage.setItem('id', data.id);
                 localStorage.setItem('email', data.email);
                 localStorage.setItem('name', data.name);
                 localStorage.setItem('surname', data.surname);
                 localStorage.setItem('role', data.role);
-                localStorage.setItem('position', data.position);
+                
+                // Прямо сохраняем объект position, если это объект
+                if (typeof data.position === 'object') {
+                    localStorage.setItem('position', JSON.stringify(data.position)); // Сериализуем объект
+                } else {
+                    localStorage.setItem('position', data.position); // Сохраняем как есть, если это не объект
+                }
+                
                 localStorage.setItem('birthday', data.birthday);
-                console.log(localStorage)
+                console.log(localStorage);
                 alert('Успешный вход!');
-                window.location.href = 'profile.html';
+                    window.location.href = 'profile.html';
             } else {
                 alert('Ошибка входа. Попробуйте еще раз.');
             }
