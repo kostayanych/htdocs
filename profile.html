@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="profile.css">
     <script src="scripts.js" defer></script>
     <style>
-        /* Простой стиль для модального окна */
-        #editModal {
+        /* Простой стиль для модальных окон */
+        .modal {
             display: none; /* Скрываем по умолчанию */
             position: absolute; /* Абсолютное позиционирование */
             background-color: white;
@@ -20,10 +20,6 @@
     </style>
 </head>
 <body onload="checkAuth(); loadProfile();">
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
     <header>
         <h1>Профиль пользователя</h1>
         <nav>
@@ -54,8 +50,17 @@
             </div>
         </section>
 
-        <!-- Модальное окно для ввода новых данных -->
-        <div id="editModal">
+        <!-- Модальное окно для редактирования других полей -->
+        <div id="editFieldModal" class="modal">
+            <h3>Редактировать информацию</h3>
+            <label for="newValue">Новое значение:</label>
+            <input type="text" id="newValue" placeholder="Введите новое значение" />
+            <button id="saveFieldButton">Сохранить</button>
+            <button onclick="closeModal('editFieldModal')">Отмена</button>
+        </div>
+
+        <!-- Модальное окно для редактирования должности -->
+        <div id="editPositionModal" class="modal">
             <h3>Редактировать должность</h3>
             <label for="department">Департамент:</label>
             <input type="text" id="department" placeholder="Введите департамент" />
@@ -63,13 +68,13 @@
             <input type="text" id="cmd" placeholder="Введите ЦМД" />
             <label for="position">Должность:</label>
             <input type="text" id="position" placeholder="Введите должность" />
-            <button id="saveButton">Сохранить</button>
-            <button id="cancelButton" onclick="closeModal()">Отмена</button>
+            <button id="savePositionButton">Сохранить</button>
+            <button onclick="closeModal('editPositionModal')">Отмена</button>
         </div>
 
         <script>
-            let currentField; // Хранит, какой именно элемент мы редактируем
-            let currentFieldType; // Хранит тип поля (name, surname и т.д.)
+            let currentField; // Хранит текущий элемент, который редактируется
+            let currentFieldType; // Хранит тип поля (например, name, surname и т.д.)
 
             function formatDate(dateString){
                 const date = new Date(dateString);
@@ -87,14 +92,11 @@
                 const email = localStorage.getItem('email') || 'Не указано';
                 const birthday = localStorage.getItem('birthday') || 'Не указано';
     
-                const positionObj = JSON.parse(localStorage.getItem('position')) || {}; // Заменено на JSON.parse
+                const positionObj = JSON.parse(localStorage.getItem('position')) || {}; 
                 let positionText = 'Не указано';
                 
-                // Проверка на наличие данных в positionObj
                 if (positionObj && positionObj.department && positionObj.position && positionObj.cmd) {
                     positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
-                } else {
-                    positionText = 'Не указано'; // Если данные отсутствуют, показываем "Не указано"
                 }
 
                 // Заполняем профиль
@@ -103,7 +105,6 @@
                 document.getElementById('userEmail').textContent = email;
                 document.getElementById('userPosition').textContent = positionText;
                 document.getElementById('userBirthday').textContent = formatDate(birthday);
-                console.log(localStorage);
             }
 
             function editField(fieldId, fieldType, event) {
@@ -112,34 +113,50 @@
                 const currentValue = document.getElementById(fieldId).textContent;
                 document.getElementById('newValue').value = currentValue;
 
-                // Получаем координаты кнопки и позиционируем модальное окно
                 const buttonRect = event.target.getBoundingClientRect();
-                const modal = document.getElementById('editModal');
+                const modal = document.getElementById('editFieldModal');
                 modal.style.left = `${buttonRect.left}px`;
-                modal.style.top = `${buttonRect.bottom + window.scrollY}px`; // Позиционируем ниже кнопки
-                modal.style.display = 'block'; // Показываем модальное окно
+                modal.style.top = `${buttonRect.bottom + window.scrollY}px`;
+                modal.style.display = 'block';
             }
 
             function editPosition(event) {
-                // Получаем текущие значения позиции и заполняем поля модального окна
                 const positionObj = JSON.parse(localStorage.getItem('position')) || {};
                 document.getElementById('department').value = positionObj.department || '';
                 document.getElementById('cmd').value = positionObj.cmd || '';
                 document.getElementById('position').value = positionObj.position || '';
 
-                // Получаем координаты кнопки и позиционируем модальное окно
                 const buttonRect = event.target.getBoundingClientRect();
-                const modal = document.getElementById('editModal');
+                const modal = document.getElementById('editPositionModal');
                 modal.style.left = `${buttonRect.left}px`;
-                modal.style.top = `${buttonRect.bottom + window.scrollY}px`; // Позиционируем ниже кнопки
-                modal.style.display = 'block'; // Показываем модальное окно
+                modal.style.top = `${buttonRect.bottom + window.scrollY}px`;
+                modal.style.display = 'block';
             }
 
-            function closeModal() {
-                document.getElementById('editModal').style.display = 'none'; // Скрываем модальное окно
+            function closeModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
             }
 
-            document.getElementById('saveButton').addEventListener('click', async () => {
+            document.getElementById('saveFieldButton').addEventListener('click', () => {
+                const newValue = document.getElementById('newValue').value;
+
+                if (currentFieldType === 'name') {
+                    localStorage.setItem('name', newValue);
+                } else if (currentFieldType === 'surname') {
+                    localStorage.setItem('surname', newValue);
+                } else if (currentFieldType === 'email') {
+                    localStorage.setItem('email', newValue);
+                } else if (currentFieldType === 'birthday') {
+                    localStorage.setItem('birthday', newValue);
+                }
+
+                document.getElementById(currentField).textContent = newValue;
+
+                closeModal('editFieldModal');
+                alert('Данные успешно обновлены!');
+            });
+
+            document.getElementById('savePositionButton').addEventListener('click', async () => {
                 const department = document.getElementById('department').value;
                 const cmd = document.getElementById('cmd').value;
                 const position = document.getElementById('position').value;
@@ -150,37 +167,12 @@
                     position,
                 };
 
-                await updateUser('position', newPosition);
-                closeModal();
+                localStorage.setItem('position', JSON.stringify(newPosition));
+                document.getElementById('userPosition').textContent = `${newPosition.department || 'Не указано'}, ${newPosition.position || 'Не указано'}, ${newPosition.cmd || 'Не указано'}`;
+
+                closeModal('editPositionModal');
+                alert('Должность успешно обновлена!');
             });
-
-            const updateUser = async (fieldType, newValue) => {
-                const userId = localStorage.getItem('id'); // Предположим, что вы храните userId в localStorage
-                const userData = {};
-                userData[fieldType] = newValue; // Подготавливаем данные для обновления
-
-                try {
-                    const response = await fetch(`http://localhost:5500/api/users/updateById/${userId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(userData),
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Ошибка при обновлении пользователя');
-                    }
-
-                    // Обновляем данные в localStorage и на странице
-                    localStorage.setItem('position', JSON.stringify(newValue)); // Сериализуем объект
-                    document.getElementById('userPosition').textContent = `${newValue.department || 'Не указано'}, ${newValue.position || 'Не указано'}, ${newValue.cmd || 'Не указано'}`;
-                    alert('Данные пользователя успешно обновлены!');
-                } catch (error) {
-                    console.error(error);
-                    alert('Произошла ошибка: ' + error.message);
-                }
-            };
         </script>
     </main>
     <footer>
