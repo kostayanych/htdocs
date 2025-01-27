@@ -1,28 +1,65 @@
-/* Общие стили */
-html, body {
+body {
+    position: relative;
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'CirceRegular', sans-serif;
-    background-color: #046A38; /* Зеленый фон */
-    color: #333;
-    text-align: center;
+    background-color: #165849; /* Цвет фона */
 }
 
-/* Верхняя полоска */
+body::before {
+    content: ''; /* Создаем пустой контент */
+    position: absolute; /* Абсолютное позиционирование */
+    top: 0; /* Заполняем весь экран */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/src/content/pattern.png'); /* Путь к вашему изображению */
+    background-repeat: repeat; /* Повторяем изображение */
+    background-size: auto; /* Автоматический размер */
+    opacity: 0.5; /* Прозрачность изображения (0.0 - 1.0) */
+    z-index: -1; /* Помещаем на задний план */
+}
+
 .topBar {
-    background-color: #871e28; /* Выделяющийся красный цвет */
+    background-color: #238370; /* Выделяющийся цвет */
     color: white;
     padding: 15px 20px;
-    display: flex; /* Flexbox для горизонтального выравнивания */
-    justify-content: space-between; /* Пространство между элементами */
-    align-items: center; /* Вертикальное центрирование */
     position: fixed; /* Полоска фиксирована сверху */
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000; /* Поверх других элементов */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+    height: 60px; /* Установите необходимую высоту для полоски */
+    display: flex; /* Используем Flexbox для выравнивания содержимого */
+    justify-content: space-between; /* Раздвигаем элементы по краям */
+    align-items: center; /* Вертикальное выравнивание по центру */
+}
+
+.topBar-right {
+    display: flex; /* Используем Flexbox для правых элементов */
+    gap: 20px; /* Расстояние между элементами */
+}
+
+a {
+    color: white; /* Цвет ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+/* Основное содержимое */
+main {
+    padding-top: 38px; /* Отступ сверху для основного содержимого */
+    /* Добавьте другие стили для вашего основного содержимого */
+}
+
+/* Остальные стили */
+.topBar {
+    background-color: #238370; /* Выделяющийся цвет */
+    color: white;
+    padding: 15px 20px;
+    position: fixed; /* Полоска фиксирована сверху */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Поверх других элементов */
 }
 
 /* Заголовок "Лента историй" */
@@ -53,7 +90,7 @@ html, body {
 
 /* Кнопка "Создать историю" */
 .createStoryButton {
-    background-color: #046A38; /* Зеленый фон */
+    background-color: #2EB398; /* Зеленый фон */
     color: white; /* Белый текст */
     border: none;
     padding: 10px 20px;
@@ -64,7 +101,7 @@ html, body {
 }
 
 .createStoryButton:hover {
-    background-color: #03532c; /* Темно-зеленый при наведении */
+    background-color: #BD536D; /* Темно-зеленый при наведении */
 }
 
 /* Отступ для основного содержимого */
@@ -85,7 +122,7 @@ h2 {
 }
 
 h3 {
-    color: #256634;
+    color: #800036;
 }
 
 /* Карточки историй */
