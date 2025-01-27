@@ -7,7 +7,7 @@ body {
     font-family: 'CirceRegular', sans-serif; /* Используйте ваш шрифт */
     margin: 0;
     padding: 0;
-    background-color: #256634; /* Темно-зеленый фон */
+    background-color: #165849; /* Темно-зеленый фон */
     color: #333;
     position: relative; /* Для абсолютного позиционирования псевдоэлемента */
 }
@@ -73,7 +73,22 @@ h2 {
     color: whitesmoke;
     margin-bottom: 20px;
 }
+.profileCard {
+    background-color: #238370; /* Цвет фона карточки */
+    padding: 20px; /* Внутренние отступы */
+    border: 2px solid #238370; /* Цвет рамки */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для глубины */
+    max-width: 500px; /* Максимальная ширина */
+    margin: 20px auto; /* Центрируем */
+   opacity:1;
+}
 
+.profileCard p {
+    font-size: 1rem; /* Размер шрифта для параграфов */
+    color: #ffffff; /* Цвет текста */
+    line-height: 1.6; /* Межстрочный интервал */
+}
 .profileDetails {
     background-color: white;
     padding: 20px;
@@ -95,6 +110,15 @@ h2 {
     line-height: 1.6;
 }
 
+footer {
+    position: fixed; /* Фиксируем элемент внизу страницы */
+    left: 0; /* Прикрепляем к левому краю */
+    bottom: 0; /* Прикрепляем к нижней части */
+    text-align: left; /* Выравнивание текста по левому краю */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Отступы сверху и снизу, а также слева и справа */
+    font-size: 1.2rem; /* Размер шрифта */
+}
 /* Карточки историй */
 .storyCard {
     background-color: white;
