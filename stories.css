@@ -1,0 +1,200 @@
+/* Общие стили */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'CirceRegular', sans-serif;
+    background-color: #046A38; /* Зеленый фон */
+    color: #333;
+    text-align: center;
+}
+
+/* Верхняя полоска */
+.topBar {
+    background-color: #871e28; /* Выделяющийся красный цвет */
+    color: white;
+    padding: 15px 20px;
+    display: flex; /* Flexbox для горизонтального выравнивания */
+    justify-content: space-between; /* Пространство между элементами */
+    align-items: center; /* Вертикальное центрирование */
+    position: fixed; /* Полоска фиксирована сверху */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Поверх других элементов */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+}
+
+/* Заголовок "Лента историй" */
+.topBar h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Навигационные ссылки и кнопки */
+.navLinks {
+    display: flex; /* Flexbox для горизонтального выравнивания кнопок */
+    align-items: center; /* Центрирование внутри полоски */
+    gap: 15px; /* Расстояние между кнопками */
+}
+
+/* Ссылки */
+.topBar a, .navLinks a {
+    color: white; /* Белый цвет текста ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+    font-weight: bold;
+    font-size: 1.2rem; /* Увеличенный размер текста */
+    transition: color 0.3s ease; /* Плавный переход цвета при наведении */
+}
+
+.navLinks a:hover {
+    color: #ffd700; /* Золотистый цвет при наведении */
+}
+
+/* Кнопка "Создать историю" */
+.createStoryButton {
+    background-color: #046A38; /* Зеленый фон */
+    color: white; /* Белый текст */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px; /* Скругленные края */
+    transition: background-color 0.3s ease; /* Плавный переход цвета */
+}
+
+.createStoryButton:hover {
+    background-color: #03532c; /* Темно-зеленый при наведении */
+}
+
+/* Отступ для основного содержимого */
+.mainContent {
+    margin-top: 70px; /* Отступ, чтобы основное содержимое не перекрывалось полоской */
+}
+
+/* Заголовки */
+h1 {
+    font-size: 2.5rem;
+    color: whitesmoke;
+}
+
+h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #256634;
+}
+
+/* Карточки историй */
+.storyCard {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.storyCard h3 {
+    margin-bottom: 10px;
+}
+
+.storyCard p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.storyCard .buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.storyCard .buttonContainer span {
+    margin-right: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.storyCard .buttonContainer img {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+/* Общие стили для фильтров и поиска */
+.filters {
+    display: flex;
+    flex-direction: column; /* Элементы располагаются вертикально */
+    align-items: center; /* Центрирование по горизонтали */
+    margin: 20px 0;
+    gap: 15px; /* Расстояние между элементами */
+}
+
+.filters h3 {
+    color: #256634; /* Темно-зеленый цвет заголовка */
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Кнопки сортировки */
+button.sortButton, button.searchButton {
+    background-color: #871e28; /* Красный фон */
+    color: white; /* Белый текст */
+    border: 2px solid #871e28; /* Красная обводка */
+    border-radius: 25px; /* Закругленные края */
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease; /* Плавный переход */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+/* Эффект наведения на кнопки */
+button.sortButton:hover, button.searchButton:hover {
+    background-color: white; /* Белый фон */
+    color: #871e28; /* Красный цвет текста */
+    border-color: #871e28; /* Красная обводка */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+}
+
+/* Поля ввода */
+input.searchInputName, input.searchInputTitle {
+    border: 2px solid #046A38; /* Зеленая обводка */
+    border-radius: 25px; /* Закругленные края */
+    padding: 10px 20px;
+    font-size: 1rem;
+    width: 100%; /* Поля занимают всю ширину контейнера */
+    max-width: 400px; /* Ограничение максимальной ширины */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    color: #333;
+    transition: all 0.3s ease; /* Плавный переход */
+    outline: none; /* Убираем стандартное выделение */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+/* Эффект фокуса на полях ввода */
+input.searchInputName:focus, input.searchInputTitle:focus {
+    border-color: #871e28; /* Красный цвет обводки */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+}
+
+/* Адаптивность для фильтров */
+@media (max-width: 600px) {
+    .filters {
+        flex-direction: column; /* Вертикальное расположение на маленьких экранах */
+    }
+
+    input.searchInputName, input.searchInputTitle {
+        max-width: 100%; /* Поля занимают всю ширину */
+    }
+}

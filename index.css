@@ -1,0 +1,74 @@
+/* Общие стили */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'CirceRegular', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #256634; /* Темно-зеленый фон */
+    color: #333;
+}
+
+header {
+    background-color: #256634;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+header a {
+    margin: 0 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+    float: left;
+    margin-right: 10px;
+}
+
+main {
+    padding: 2rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    color: whitesmoke;
+    margin-bottom: 20px;
+}
+
+.profileDetails {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.profileDetails h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.profileDetails p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}

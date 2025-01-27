@@ -4,64 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Лента историй</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="scripts.js" defer></script> <!-- Убедитесь, что scripts.js загружается -->
+    <link rel="stylesheet" href="stories.css">
+    <script src="scripts.js" defer></script>
     <style>
         /* Добавляем базовые стили */
         .cke_notifications_area {
-        display: none !important;
+            display: none !important;
         }
-        .story {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .story img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
         .filters {
-            margin: 20px 0;
+            margin:20px 0;
         }
     </style>
 </head>
 <body>
+    <body>
+        <!-- Верхняя полоска -->
+        <header class="topBar">
+            <h1>Лента историй</h1>
+            <nav class="navLinks">
+                <a href="profile.html">Профиль</a>
+                <button id="createStoryButton" class="createStoryButton">
+                    Создать историю
+                </button>
+            </nav>
+        </header>
+    </body>
 <main>
-    <header>
-        <h1>Лента историй</h1>
-        <nav>
-            <a href="profile.html">Профиль</a>
-        </nav>
-    </header>
-    <section>
-        <button id="createStoryButton" class="createStoryButton" style="
-            background-color: #046A38; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            margin: 10px 0; 
-            font-size: 1rem; 
-            cursor: pointer; 
-            border-radius: 5px;">
-            Создать историю
-        </button>
-    </section>
-    <h2>Истории:</h2>
-    
     <div class="filters">
+        <!-- Сортировка -->
         <h3>Сортировать по лайкам:</h3>
-        <button id="filterLikesAscButton">По возрастанию</button>
-        <button id="filterLikesDescButton">По убыванию</button>
-        
+        <button id="filterLikesAscButton" class="sortButton">По возрастанию</button>
+        <button id="filterLikesDescButton" class="sortButton">По убыванию</button>
+    
+        <!-- Поля ввода для поиска -->
+        <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории" />
+        <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории" />
+        <button id="searchButton" class="searchButton">Поиск</button>
     </div>
-
-    <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории"/>
-    <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории"/>
-    <button id="searchButton" class="searchButton">Поиск</button>
     
     <div id="storiesContainer" class="storiesContainer"></div>
     
@@ -94,10 +73,11 @@
             }
             loadStories(filters);
         });
-                            // Перенаправление на страницу создания истории
+
+        // Перенаправление на страницу создания истории
         document.getElementById('createStoryButton').addEventListener('click', function () {
-                window.location.href = 'create_story.html'; // Страница создания истории
-            });
+            window.location.href = 'create_story.html'; // Страница создания истории
+        });
     };
 
     async function loadStoriesby(filters = {}) {
@@ -119,10 +99,9 @@
         const storiesContainer = document.getElementById('storiesContainer');
         storiesContainer.innerHTML = ''; // Очищаем предыдущие истории
 
-
         filteredStories.forEach(story => {
             const storyElement = document.createElement('div');
-            storyElement.classList.add('storyCard');
+            storyElement.classList.add('storyCard'); // Применяем класс для контуров
             storyElement.innerHTML = `
                 <h3>${story.name}</h3>
                 <p>Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</p>

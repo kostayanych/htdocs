@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Искренний сервис</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<main>
     <header>
         <nav>
             <a href="/">
-                <img src="/src/content/logo.png" alt="Логотип" style="width: auto; height: 100px; margin-left: 0;">
+                <img src="/src/content/logo.png" alt="Логотип" class="logo">
             </a>
             <a href="/">Главная</a>
             <a href="/profile.html">Профиль</a>
@@ -20,33 +19,33 @@
             <a href="/login.html">Вход</a>
         </nav>
     </header>
-    <section>
-        <div class="center">
+    <main>
+        <section class="center">
             <h1>Искренний сервис</h1>
             <p class="subheading">ГБУ Московское Долголетие</p>
-        </div>
-    </section>
-    <section>
-        <h2>О нашем сервисе</h2>
-        <p>
-            Мы рады приветствовать вас на сайте Искреннего сервиса! 
-            Здесь вы можете делиться своими историями о работе, опыте и жизни, а также находить поддержку и вдохновение 
-            от других пользователей. Наша цель - создать сообщество, где каждый сможет рассказать свою историю и быть услышанным.
-        </p>
-    </section>
-    <section>
-        <h2>Как оставить свою историю</h2>
-        <p>
-            Чтобы поделиться своей историей, просто перейдите в раздел "Истории пользователей" и следуйте 
-            инструкциям. Мы ценим каждую историю и стремимся создать безопасное и поддерживающее пространство для всех.
-        </p>
-        <button class="register" onclick="window.location.href='/register.html'">Зарегистрироваться</button>
-        <button class="login" onclick="window.location.href='/login.html'">Войти</button>
-    </section>
-</main>
+        </section>
+        <section>
+            <h2>О нашем сервисе</h2>
+            <p>
+                Мы рады приветствовать вас на сайте Искреннего сервиса! 
+                Здесь вы можете делиться своими историями о работе, опыте и жизни, а также находить поддержку и вдохновение 
+                от других пользователей. Наша цель - создать сообщество, где каждый сможет рассказать свою историю и быть услышанным.
+            </p>
+        </section>
+        <section>
+            <h2>Как оставить свою историю</h2>
+            <p>
+                Чтобы поделиться своей историей, просто перейдите в раздел "Истории пользователей" и следуйте 
+                инструкциям. Мы ценим каждую историю и стремимся создать безопасное и поддерживающее пространство для всех.
+            </p>
+            <div class="button-container">
+                <button class="register" onclick="window.location.href='/register.html'">Зарегистрироваться</button>
+                <button class="login" onclick="window.location.href='/login.html'">Войти</button>
+            </div>
+        </section>
+    </main>
     <footer>
         <p>&copy; 2024 Искренний сервис. Все права защищены.</p>
     </footer>
-
 </body>
 </html>
