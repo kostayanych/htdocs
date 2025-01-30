@@ -73,7 +73,22 @@
     
                 return `${day}.${month}.${year}`;
             }
+            function formatToDB(value) {
+                // Проверяем, что входное значение соответствует ожидаемому формату
+                const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
+                if (!datePattern.test(value)) {
+                    throw new Error('Неверный формат даты. Ожидается DD.MM.YYYY');
+                }
 
+                // Разделяем строку на день, месяц и год
+                const [day, month, year] = value.split('.');
+
+                // Формируем дату в нужном формате
+                const formattedDate = new Date(Date.UTC(year, month - 1, day));
+
+                // Возвращаем дату в формате ISO
+                return formattedDate.toISOString();
+            }
 
             function loadProfile() {
                 // Получаем данные из localStorage
@@ -81,7 +96,7 @@
                 const surname = localStorage.getItem('surname') || 'Не указано';
                 const email = localStorage.getItem('email') || 'Не указано';
                 const birthday = localStorage.getItem('birthday') || 'Не указано';
-    
+                console.log(birthday);
                 const positionObj = JSON.parse(localStorage.getItem('position')) || {}; 
                 let positionText = 'Не указано';
                 
@@ -130,8 +145,12 @@
                 if (modalId === 'editFieldModal' || modalId === 'editPositionModal') {
                     const userId = localStorage.getItem('id'); // Получаем ID пользователя из localStorage
                     const updatedData = {};
-
-                    if (modalId === 'editFieldModal' && currentFieldType) {
+                    if (modalId === 'editFieldModal' && currentFieldType === 'birthday'){
+                        const newValue = document.getElementById('newValue').value;
+                        updatedData[currentFieldType] = formatToDB(newValue);
+                    }    
+                    else if (modalId === 'editFieldModal' && currentFieldType) {
+                        console.log(currentFieldType);
                         const newValue = document.getElementById('newValue').value;
                         updatedData[currentFieldType] = newValue;
                     } else if (modalId === 'editPositionModal') {
@@ -182,7 +201,7 @@
                 } else if (currentFieldType === 'email') {
                     localStorage.setItem('email', newValue);
                 } else if (currentFieldType === 'birthday') {
-                    localStorage.setItem('birthday', newValue);
+                    localStorage.setItem('birthday', formatToDB(newValue));
                 }
 
                 document.getElementById(currentField).textContent = newValue;
