@@ -1,15 +1,22 @@
-/* Общие стили */
+@font-face {
+	font-family: 'Gerbera';
+	src: url('../fonts/gerbera.eot'); /* IE 9 Compatibility Mode */
+	src: url('../fonts/gerbera.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('../fonts/gerbera.woff2') format('woff2'), /* Super Modern Browsers */
+		url('../fonts/gerbera.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('../fonts/gerbera.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('../fonts/gerbera.svg#gerbera') format('svg'); /* Chrome < 4, Legacy iOS */
+}
 html, body {
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: 'CirceRegular', sans-serif; /* Используйте ваш шрифт */
-    margin: 0;
-    padding: 0;
-    background-color: #165849; /* Темно-зеленый фон */
-    color: #333;
-    position: relative; /* Для абсолютного позиционирования псевдоэлемента */
+    font-family: 'Gerbera', sans-serif;
+    min-height: 100vh; /* Установите минимальную высоту на 100vh */
+    background-color: #165849; /* Цвет фона */
 }
 
 body::before {
@@ -26,15 +33,21 @@ body::before {
     z-index: -1; /* Помещаем на задний план */
 }
 
+/* Остальные стили остаются неизменными */
 header {
     background-color: #238370; /* Выделяющийся цвет */
-    padding: 1rem 2rem;
-    text-align: center;
+    color: white;
+    padding: 15px 20px;
     position: fixed; /* Полоска фиксирована сверху */
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000; /* Поверх других элементов */
+    height: 70px; /* Установите необходимую высоту для полоски */
+    display: flex; /* Используем Flexbox для выравнивания содержимого */
+    justify-content: space-between; /* Раздвигаем элементы по краям */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    font-size: 1.2em;
 }
 
 header a {
@@ -48,167 +61,145 @@ header a:hover {
     text-decoration: underline;
 }
 
-.logo {
-    width: 50px;
-    height: auto;
-    float: left;
-    margin-right: 10px;
+nav {
+    margin-top: 10px;
 }
 
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+}
+.logo {
+    width: 200px;
+    float: left;
+    height: auto; /* Устанавливаем высоту логотипа (можно настроить по своему усмотрению) */
+    margin-right: 20px; /* Добавляем отступ между логотипом и заголовком */
+
+}
+
+nav .logoutButton {
+    background-color: #2EB398; /* Зеленый фон */
+    color: white; /* Белый текст */
+    font-family: 'Gerbera', sans-serif;
+    border: none;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: background-color 0.3s ease; /* Плавный переход цвета */
+}
+nav .logoutButton:hover {
+    background-color: #800036; /* Темно-зеленый при наведении */
+}
 main {
     padding: 2rem;
-    padding-top: 120px; /* Отступ сверху для основного содержимого, чтобы не перекрывалось полоской */
+    padding-top: 127px; /* Отступ сверху для основного содержимого, чтобы не перекрывалось полоской */
     text-align: center;
 }
 
-/* Заголовки */
-h1 {
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 2rem;
-    color: whitesmoke;
-    margin-bottom: 20px;
-}
-.profileCard {
-    background-color: #238370; /* Цвет фона карточки */
-    padding: 20px; /* Внутренние отступы */
+/* Стили для контейнера профиля */
+.profileContainer {
+    background-color: rgb(241, 241, 241);
     border: 2px solid #238370; /* Цвет рамки */
-    border-radius: 8px; /* Закругленные углы */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 30px; /* Закругленные углы */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для глубины */
-    max-width: 500px; /* Максимальная ширина */
+    max-width: 750px; /* Максимальная ширина */
     margin: 20px auto; /* Центрируем */
-   opacity:1;
-}
-
-.profileCard p {
-    font-size: 1rem; /* Размер шрифта для параграфов */
-    color: #ffffff; /* Цвет текста */
-    line-height: 1.6; /* Межстрочный интервал */
-}
-.profileDetails {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 20px auto; /* Центрируем */
-}
-
-.profileDetails h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.profileDetails p {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.6;
-}
-
-footer {
-    position: fixed; /* Фиксируем элемент внизу страницы */
-    left: 0; /* Прикрепляем к левому краю */
-    bottom: 0; /* Прикрепляем к нижней части */
-    text-align: left; /* Выравнивание текста по левому краю */
-    color: white; /* Цвет текста */
-    padding: 10px 20px; /* Отступы сверху и снизу, а также слева и справа */
-    font-size: 1.2rem; /* Размер шрифта */
-}
-/* Карточки историй */
-.storyCard {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 600px;
-    width: 100%;
-}
-
-.storyCard h3 {
-    font-size: 1.5rem; /* Размер заголовка */
-    margin: 10px 0; /* Отступы сверху и снизу */
-    color: #800036; /* Цвет заголовка */
-}
-
-.storyCard p {
-    font-size: 1rem; /* Размер шрифта для описания */
-    line-height: 1.6; /* Межстрочный интервал */
+    opacity:1;
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
     color: #333; /* Цвет текста */
 }
 
-/* Общие стили для фильтров и поиска */
-.filters {
-    display: flex;
-    flex-direction: column; /* Элементы располагаются вертикально */
-    align-items: center; /* Центрирование по горизонтали */
-    margin: 20px 0;
-    gap: 15px; /* Расстояние между элементами */
+/* Стили для карточки профиля */
+.profileCard p {
+    margin: 10px 0;
+    text-align: left;
 }
 
-.filters h3 {
-    color: #256634; /* Темно-зеленый цвет заголовка */
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-/* Кнопки сортировки */
-button.sortButton, button.searchButton {
-    background-color: #871e28; /* Красный фон */
-    color: white; /* Белый текст */
-    border: 2px solid #871e28; /* Красная обводка */
-    border-radius: 25px; /* Закругленные края */
-    padding: 10px 20px;
-    font-size: 1rem;
+/* Стили для кнопок редактирования */
+.editButton {
+    background-color: #2EB398; /* Зеленый фон */
+    transition: background-color 0.3s ease; /* Плавный переход цвета */
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
+    color: rgb(241, 241, 241);
+    border-radius: 30px;
+    border: none;
+    padding: 5px 10px;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease; /* Плавный переход */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    margin-left: 10px;
+}
+.editButton:hover {
+    background-color: #800036; /* Темно-зеленый при наведении */
+}
+/* Стили для модальных окон */
+.modal {
+    text-align: left; /* Выравниваем текст внутри модального окна по левому краю */
+    display: none; /* Скрываем по умолчанию */
+    position: absolute; /* Абсолютное позиционирование */
+    border: 2px solid #238370; /* Цвет рамки */
+    background-color: #2EB398; /* Зеленый фон */
+    transition: background-color 0.3s ease; /* Плавный переход цвета */
+    border: 1px solid #ccc;
+    padding: 20px;
+    color:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Обеспечиваем, что окно будет сверху */
+    border-radius: 30px;
+    
+}
+.modal label {
+    display: block; /* Отображаем метки как блочные элементы для лучшего выравнивания */
+    margin-top: 10px; /* Отступ сверху для отделения от предыдущего элемента */
 }
 
-/* Эффект наведения на кнопки */
-button.sortButton:hover, button.searchButton:hover {
-    background-color: white; /* Белый фон */
-    color: #871e28; /* Красный цвет текста */
-    border-color: #871e28; /* Красная обводка */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+.modal input {
+    width: 100%; /* Растягиваем поля ввода на всю ширину контейнера */
+    padding: 10px; /* Отступы внутри полей ввода */
+    margin-top: 5px; /* Отступ сверху для отделения от меток */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+    border-radius: 30px;
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
+
 }
 
-/* Поля ввода */
-input.searchInputName, input.searchInputTitle {
-    border: 2px solid #046A38; /* Зеленая обводка */
-    border-radius: 25px; /* Закругленные края */
-    padding: 10px 20px;
-    font-size: 1rem;
-    width: 100%; /* Поля занимают всю ширину контейнера */
-    max-width: 400px; /* Ограничение максимальной ширины */
-    box-sizing: border-box; /* Учитываем padding в ширине */
-    color: #333;
-    transition: all 0.3s ease; /* Плавный переход */
-    outline: none; /* Убираем стандартное выделение */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+.modal button {
+    margin-top: 10px; /* Отступ сверху для отделения кнопок */
+    margin-right: 10px; /* Отступ справа между кнопками */
+}
+/* Стили для кнопок в модальных окнах */
+.saveButton {
+    background: #165849; /* Начальный цвет кнопки "Сохранить" */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
 }
 
-/* Эффект фокуса на полях ввода */
-input.searchInputName:focus, input.searchInputTitle:focus {
-    border-color: #871e28; /* Красный цвет обводки */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+/* Стили для кнопки "Отмена" */
+.cancelButton {
+    background: rgb(189,83, 109); /* Цвет при наведении */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    margin-left: 10px; /* Отступ между кнопками */
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
 }
 
-/* Адаптивность для фильтров */
-@media (max-width: 600px) {
-    .filters {
-        flex-direction: column; /* Вертикальное расположение на маленьких экранах */
-    }
-
-    input.searchInputName, input.searchInputTitle {
-        max-width: 100%; /* Поля занимают всю ширину */
-    }
+.cancelButton:hover {
+    
+    background: rgb(128, 0, 59);
+}
+footer {
+    position: fixed; /* Фиксируем элемент внизу страницы */
+    left: 0; /* Прикрепляем к левому краю */
+    bottom: 0px; /* Установите отступ от нижней части */
+    text-align: left; /* Выравнивание текста по левому краю */
+    color: white; /* Цвет текста */
+    padding: 0px 0px; /* Отступы сверху и снизу, а также слева и справа */
+    font-size: 1.2rem; /* Размер шрифта */
 }

@@ -1,74 +1,156 @@
-/* Общие стили */
-html, body {
-    height: 100%;
+@font-face {
+    font-family: 'Gerbera';
+    src: url('../fonts/gerbera.eot'); /* IE 9 Compatibility Mode */
+    src: url('../fonts/gerbera.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+         url('../fonts/gerbera.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/gerbera.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+         url('../fonts/gerbera.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/gerbera.svg#gerbera') format('svg'); /* Chrome < 4, Legacy iOS */
 }
+
 
 body {
-    font-family: 'CirceRegular', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #256634; /* Темно-зеленый фон */
-    color: #333;
+    font-family: 'Gerbera', sans-serif;
+    min-height: 100vh; /* Установите минимальную высоту на 100vh */
+    background-color: #165849; /* Цвет фона */
 }
 
-header {
-    background-color: #256634;
-    padding: 1rem 2rem;
-    text-align: center;
+body::before {
+    content: ''; /* Создаем пустой контент */
+    position: absolute; /* Абсолютное позиционирование */
+    top: 0; /* Заполняем весь экран */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/src/content/pattern.png'); /* Путь к вашему изображению */
+    background-repeat: repeat; /* Повторяем изображение */
+    background-size: auto; /* Автоматический размер */
+    opacity: 0.5; /* Прозрачность изображения (0.0 - 1.0) */
+    z-index: -1; /* Помещаем на задний план */
 }
 
-header a {
-    margin: 0 1rem;
-    color: white;
-    text-decoration: none;
+
+.center {
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    height: 30%; /* Высота контейнера в 25% от высоты окна */
+    max-width: 950px; /* Максимальная ширина контейнера */
+    text-align: center; /* Центрируем текст внутри контейнера */
+    background-color: #165849; /* Цвет фона */
+    flex-direction: column; /* Вертикальное расположение */
+    border-radius: 30px;
+    margin: 0 auto; /* Центрируем контейнер по горизонтали */
+   
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение текста и кнопок */
+    align-items: center; /* Центрируем элементы по горизонтали */
+}
+
+.animated-text {
+    font-size: 3rem; /* Крупный текст */
     font-weight: bold;
+    color: rgb(241, 241, 241);
+    font-size: 6em;
+    display: inline-block; /* Для анимации элементов внутри */
+    overflow: hidden;
 }
 
-header a:hover {
-    text-decoration: underline;
+.animated-text span {
+    display: inline-block; /* Каждая буква анимируется отдельно */
+    opacity: 0; /* Изначально буквы невидимы */
+    transform: translateY(50px); /* Сдвиг вниз */
+    animation: fadeInUp 1s ease forwards; /* Анимация для появления */
 }
+
+/* Анимация для появления */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px); /* Сдвиг вниз */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Исходное положение */
+    }
+}
+
+/* Анимация для каждой буквы с задержкой */
+.animated-text span:nth-child(1) { animation-delay: 0s; }
+.animated-text span:nth-child(2) { animation-delay: 0.1s; }
+.animated-text span:nth-child(3) { animation-delay: 0.2s; }
+.animated-text span:nth-child(4) { animation-delay: 0.3s; }
+.animated-text span:nth-child(5) { animation-delay: 0.4s; }
+.animated-text span:nth-child(6) { animation-delay: 0.5s; }
+.animated-text span:nth-child(7) { animation-delay: 0.6s; }
+.animated-text span:nth-child(8) { animation-delay: 0.7s; }
+.animated-text span:nth-child(9) { animation-delay: 0.8s; }
+.animated-text span:nth-child(10) { animation-delay: 0.9s; }
+.animated-text span:nth-child(11) { animation-delay: 1s; }
+.animated-text span:nth-child(12) { animation-delay: 1.1s; }
+.animated-text span:nth-child(13) { animation-delay: 1.2s; }
+.animated-text span:nth-child(14) { animation-delay: 1.3s; }
+.animated-text span:nth-child(15) { animation-delay: 1.4s; }
 
 .logo {
-    width: 50px;
-    height: auto;
-    float: left;
-    margin-right: 10px;
+    width: 200px;
+    height: auto; /* Устанавливаем высоту логотипа (можно настроить по своему усмотрению) */
+    margin-bottom: 20px; /* Отступ между логотипом и заголовком */
 }
 
-main {
-    padding: 2rem;
-    text-align: center;
+.button-container {
+    margin-top: 10px; /* Отступ между текстом и кнопками */
+    display: flex; /* Используем flexbox для кнопок */
+    justify-content: center; /* Центрируем кнопки */
+}
+@keyframes fadeInButtons {
+    0% {
+        opacity: 0; /* Кнопки невидимы */
+        transform: translateY(30px); /* Сдвинуты вниз */
+    }
+    100% {
+        opacity: 1; /* Кнопки видимы */
+        transform: translateY(0); /* Возвращаются в исходное положение */
+    }
 }
 
-h1 {
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-h2 {
+.button-container button {
+    background-color: #2EB398; /* Зеленый фон */
+    color: white; /* Белый текст */
+    font-family: 'Gerbera', sans-serif;
+    border: none;
     font-size: 2rem;
-    color: whitesmoke;
-    margin-bottom: 20px;
+    padding: 10px 30px;
+    border-radius: 30px;
+    margin: 10px; /* Отступ между кнопками */
+    opacity: 0; /* Изначально кнопки невидимы */
+    transform: translateY(30px); /* Сдвинуты вниз */
+    animation: fadeInButtons 0.8s ease forwards; /* Анимация появления */
+    margin-bottom: 30px;
+    
+}
+.button-container button:nth-child(1) {
+    animation-delay: 2s; /* Первая кнопка появляется через 2 секунды после начала */
 }
 
-.profileDetails {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 0 auto;
+.button-container button:nth-child(2) {
+    animation-delay: 2.2s; /* Вторая кнопка появляется через 2.2 секунды */
+}
+.button-container button:hover {
+    background-color: #289a83; /* Более темный зеленый при наведении */
+    transform: scale(1.05); /* Легкое увеличение кнопки */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Плавный переход */
 }
 
-.profileDetails h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.profileDetails p {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.6;
+footer {
+    position: fixed; /* Фиксируем элемент внизу страницы */
+    left: 0; /* Прикрепляем к левому краю */
+    bottom: 0px; /* Установите отступ от нижней части */
+    text-align: left; /* Выравнивание текста по левому краю */
+    color: white; /* Цвет текста */
+    padding: 0px 0px; /* Отступы сверху и снизу, а также слева и справа */
+    font-size: 1.2rem; /* Размер шрифта */
 }

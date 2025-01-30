@@ -3,34 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль пользователя</title>
+    
     <link rel="stylesheet" href="profile.css">
     <script src="scripts.js" defer></script>
-    <style>
-        /* Простой стиль для модальных окон */
-        .modal {
-            display: none; /* Скрываем по умолчанию */
-            position: absolute; /* Абсолютное позиционирование */
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000; /* Обеспечиваем, что окно будет сверху */
-        }
-    </style>
 </head>
 <body onload="checkAuth(); loadProfile();">
     <header>
+        <img src="/src/content/logo.png" alt="Логотип" class="logo">
         <h1>Профиль пользователя</h1>
         <nav>
             <a href="stories.html">Лента историй</a>
-            <a href="index.html">Главная</a>
             <button class="logoutButton" onclick="logout()">Выйти</button>
         </nav>
     </header>
     <main>
-        <section class="profileContainer">
-            <h2>Информация о пользователе</h2>
+        <section class="profileContainer"> 
+            <h2>Информация о пользователе </h2>
             <div class="profileCard">
                 <p><strong>Имя:</strong> <span id="userName"></span>
                     <button class="editButton" onclick="editField('userName', 'name', event)">Изменить</button>
@@ -39,39 +27,40 @@
                     <button class="editButton" onclick="editField('userSurname', 'surname', event)">Изменить</button>
                 </p>
                 <p><strong>Email:</strong> <span id="userEmail"></span>
-                    <button class="editButton" onclick="editField('userEmail', 'email', event)">Изменить</button>
-                </p>
-                <p><strong>Должность:</strong> <span id="userPosition"></span>
-                    <button class="editButton" onclick="editPosition(event)">Изменить</button>
                 </p>
                 <p><strong>Дата рождения:</strong> <span id="userBirthday"></span>
                     <button class="editButton" onclick="editField('userBirthday', 'birthday', event)">Изменить</button>
                 </p>
+                <p><strong>Должность:</strong> <span id="userPosition"></span>
+                    <button class="editButton" onclick="editPosition(event)">Изменить</button>
+                </p>
+                
             </div>
         </section>
 
-        <!-- Модальное окно для редактирования других полей -->
+        <!-- Модальные окна для редактирования информации -->
         <div id="editFieldModal" class="modal">
             <h3>Редактировать информацию</h3>
             <label for="newValue">Новое значение:</label>
             <input type="text" id="newValue" placeholder="Введите новое значение" />
-            <button id="saveFieldButton">Сохранить</button>
-            <button onclick="closeModal('editFieldModal')">Отмена</button>
+            <button id="saveFieldButton" class="saveButton">Сохранить</button>
+            <button class="cancelButton" onclick="closeModal('editFieldModal')">Отмена</button>
         </div>
 
-        <!-- Модальное окно для редактирования должности -->
         <div id="editPositionModal" class="modal">
             <h3>Редактировать должность</h3>
             <label for="department">Департамент:</label>
-            <input type="text" id="department" placeholder="Введите департамент" />
+            <input type="text" id="department" placeholder="Введите департамент" /><br>
             <label for="cmd">ЦМД:</label>
-            <input type="text" id="cmd" placeholder="Введите ЦМД" />
+            <input type="text" id="cmd" placeholder="Введите ЦМД" /><br>
             <label for="position">Должность:</label>
             <input type="text" id="position" placeholder="Введите должность" />
-            <button id="savePositionButton">Сохранить</button>
-            <button onclick="closeModal('editPositionModal')">Отмена</button>
+            <button id="savePositionButton" class = "saveButton">Сохранить</button>
+            <button onclick="closeModal('editPositionModal')"  class = "cancelButton">Отмена</button>
         </div>
+    </main>
 
+</body>
         <script>
             let currentField; // Хранит текущий элемент, который редактируется
             let currentFieldType; // Хранит тип поля (например, name, surname и т.д.)
@@ -84,6 +73,7 @@
     
                 return `${day}.${month}.${year}`;
             }
+
 
             function loadProfile() {
                 // Получаем данные из localStorage
@@ -166,6 +156,7 @@
                     cmd,
                     position,
                 };
+
 
                 localStorage.setItem('position', JSON.stringify(newPosition));
                 document.getElementById('userPosition').textContent = `${newPosition.department || 'Не указано'}, ${newPosition.position || 'Не указано'}, ${newPosition.cmd || 'Не указано'}`;

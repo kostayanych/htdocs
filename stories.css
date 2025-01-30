@@ -1,7 +1,18 @@
+@font-face {
+	font-family: 'Gerbera';
+	src: url('../fonts/gerbera.eot'); /* IE 9 Compatibility Mode */
+	src: url('../fonts/gerbera.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('../fonts/gerbera.woff2') format('woff2'), /* Super Modern Browsers */
+		url('../fonts/gerbera.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('../fonts/gerbera.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('../fonts/gerbera.svg#gerbera') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
 body {
     position: relative;
     margin: 0;
     padding: 0;
+    font-family: 'Gerbera', sans-serif;
     height: 100%;
     background-color: #165849; /* Цвет фона */
 }
@@ -29,7 +40,7 @@ body::before {
     left: 0;
     right: 0;
     z-index: 1000; /* Поверх других элементов */
-    height: 60px; /* Установите необходимую высоту для полоски */
+    height: 70px; /* Установите необходимую высоту для полоски */
     display: flex; /* Используем Flexbox для выравнивания содержимого */
     justify-content: space-between; /* Раздвигаем элементы по краям */
     align-items: center; /* Вертикальное выравнивание по центру */
@@ -55,7 +66,7 @@ footer {
 }
 /* Основное содержимое */
 main {
-    padding-top: 38px; /* Отступ сверху для основного содержимого */
+    padding-top: 48px; /* Отступ сверху для основного содержимого */
     /* Добавьте другие стили для вашего основного содержимого */
 }
 
@@ -93,23 +104,24 @@ main {
 }
 
 .navLinks a:hover {
-    color: #ffd700; /* Золотистый цвет при наведении */
+   /* color: rgb(197, 197, 197);*/
+   text-decoration: underline;
 }
 
 /* Кнопка "Создать историю" */
 .createStoryButton {
     background-color: #2EB398; /* Зеленый фон */
     color: white; /* Белый текст */
+    font-family: 'Gerbera', sans-serif;
     border: none;
+    font-size: 1.2rem;
     padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px; /* Скругленные края */
+    border-radius: 30px;
     transition: background-color 0.3s ease; /* Плавный переход цвета */
 }
 
 .createStoryButton:hover {
-    background-color: #BD536D; /* Темно-зеленый при наведении */
+    background-color: #800036; /* Темно-зеленый при наведении */
 }
 
 /* Отступ для основного содержимого */
@@ -126,44 +138,83 @@ h1 {
 h2 {
     font-size: 2rem;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 h3 {
     color: #800036;
 }
+.logo {
+    width: 200px;
+    float: left;
+    height: auto; /* Устанавливаем высоту логотипа (можно настроить по своему усмотрению) */
+    margin-right: 20px; /* Добавляем отступ между логотипом и заголовком */
 
+}
 /* Карточки историй */
 .storyCard {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 600px;
-    width: 100%;
-}
-
-.storyCard h3 {
-    font-size: 1.5rem; /* Устанавливаем такой же размер шрифта как и в заголовке "Лента историй" */
-    margin: 10px 0; /* Отступы сверху и снизу */
-    color: #800036; /* Цвет заголовка, если нужно */
-}
-
-/* Остальные стили для карточек историй */
-.storyCard p {
-    font-size: 1rem; /* Размер шрифта для описания */
-    line-height: 1.6; /* Межстрочный интервал */
+    background-color: rgb(241, 241, 241);
+    border: 1px solid #ccc; /* Граница для карточки */
+    border-radius: 30px; /* Скругленные углы */
+    padding: 30px; /* Внутренние отступы */
+    transition: transform 0.3s ease; /* Плавный переход для трансформации */
+    max-width: 600px; /* Максимальная ширина карточки */
+    width: 100%; /* Карточки занимают всю ширину контейнера */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    margin-bottom: 20px; /* Отступ между карточками */
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
     color: #333; /* Цвет текста */
+    margin-left: 160px; /* Отступ слева для сдвига правее */
+}
+/* Эффект при наведении */
+.storyCard:hover {
+    transform: scale(1.05); /* Увеличение на 5% */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Добавление тени для эффекта */
+}
+/* Заголовок с датой */
+.storyCard .header {
+    display: flex; /* Flex-контейнер для заголовка и даты */
+    justify-content: space-between; /* Заголовок слева, дата справа */
+    align-items: center; /* Выравниваем элементы по вертикали */
+    margin-bottom: 15px;
+}
+
+/* Заголовок истории */
+.storyCard h3 {
+    font-size: 2rem; /* Увеличиваем размер заголовка */
+    margin-bottom: 5px; /* Отступ снизу */
+    margin-top: -10px; /* Поднимите заголовок вверх */
+    line-height: 1.2; /* Установите высоту строки меньше */
+    color: #800036; /* Цвет заголовка */
+    font-family: 'Gerbera', sans-serif; /* Простой и читаемый шрифт */
+    font-weight: bold; /* Жирный текст */
+    text-align: left; /* Выравнивание заголовка */
+}
+.storyCard .date {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 5px; /* Отступ снизу */
+}
+
+.storyCard .author {
+    font-size: 1rem;
+    color: #555;
+    text-align: right; /* Выравниваем автора справа */
+}
+/* Текст истории */
+.storyCard p {
+    font-size: 1.2rem; /* Увеличиваем размер текста описания */
+    line-height: 1.8; /* Межстрочный интервал для удобства чтения */
+    margin-bottom: 15px; /* Отступ снизу между абзацами */
+    color: #444; /* Немного более светлый цвет текста */
 }
 
 .storyCard .buttonContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-top: 10px;
+    padding-right: 250px;
 }
 
 .storyCard .buttonContainer span {
@@ -178,71 +229,93 @@ h3 {
     height: 20px;
     margin-right: 10px;
 }
-/* Общие стили для фильтров и поиска */
-.filters {
+.mainContainer {
     display: flex;
-    flex-direction: column; /* Элементы располагаются вертикально */
-    align-items: center; /* Центрирование по горизонтали */
-    margin: 20px 0;
-    gap: 15px; /* Расстояние между элементами */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin: 20px;
+    padding-top: 80px; /* Отступ сверху для всего контента */
+}
+/* Стили для фильтров (слева) */
+.filters {
+    font-family: 'Gerbera', sans-serif; /* Шрифт */
+    position: fixed; /* Фиксируем блок фильтров */
+    top: 70px; /* Расстояние от верхнего края экрана */
+    left: 23px; /* Расстояние от левого края экрана */
+    width: 400px; /* Фиксируем ширину блока */
+    padding: 24px; /* Внутренние отступы */
+    z-index: 100; /* Размещаем поверх других элементов */
 }
 
-.filters h3 {
-    color: #256634; /* Темно-зеленый цвет заголовка */
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+/* Стили для контейнера историй (справа) */
+.storiesContainer {
+    flex: 3; /* Занимает большую часть пространства */
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение историй */
+    gap: 10px; /* Расстояние между карточками */
+    margin-left: 355px; /* Увеличиваем отступ слева, чтобы сдвинуть истории правее */
 }
 
-/* Кнопки сортировки */
+/* Карточка истории */
 button.sortButton, button.searchButton {
-    background-color: #871e28; /* Красный фон */
-    color: white; /* Белый текст */
-    border: 2px solid #871e28; /* Красная обводка */
-    border-radius: 25px; /* Закругленные края */
+    background-color: #800036;
+    color: white;
+    border: 2px solid #800036;
+    border-radius: 30px;
     padding: 10px 20px;
     font-size: 1rem;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s ease; /* Плавный переход */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    transition: all 0.3s ease;
 }
-
-/* Эффект наведения на кнопки */
+/* Кнопки сортировки */
 button.sortButton:hover, button.searchButton:hover {
-    background-color: white; /* Белый фон */
-    color: #871e28; /* Красный цвет текста */
-    border-color: #871e28; /* Красная обводка */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+    background-color: white;
+    color: #800036;
+    border-color: #800036;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Поля ввода */
 input.searchInputName, input.searchInputTitle {
-    border: 2px solid #046A38; /* Зеленая обводка */
-    border-radius: 25px; /* Закругленные края */
+    border: 2px solid #046A38;
+    border-radius: 30px;
     padding: 10px 20px;
     font-size: 1rem;
-    width: 100%; /* Поля занимают всю ширину контейнера */
-    max-width: 400px; /* Ограничение максимальной ширины */
-    box-sizing: border-box; /* Учитываем padding в ширине */
+    width: 100%;
+    box-sizing: border-box;
     color: #333;
-    transition: all 0.3s ease; /* Плавный переход */
-    outline: none; /* Убираем стандартное выделение */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Эффект фокуса на полях ввода */
 input.searchInputName:focus, input.searchInputTitle:focus {
-    border-color: #871e28; /* Красный цвет обводки */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличенная тень */
+    border-color: #800036;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
-
-/* Адаптивность для фильтров */
-@media (max-width: 600px) {
-    .filters {
+.comment + hr {
+    border: none; /* Убираем стандартные границы */
+    height: 1px; /* Высота линии */
+    background-color: #ccc; /* Цвет линии */
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+.comment-author {
+    font-weight: bold; /* Жирный шрифт для имени автора */
+    font-size: 0.7em; /* Изменяем размер шрифта для имени автора */
+}
+/* Адаптивность */
+@media (max-width: 768px) {
+    .mainContainer {
         flex-direction: column; /* Вертикальное расположение на маленьких экранах */
     }
 
-    input.searchInputName, input.searchInputTitle {
-        max-width: 100%; /* Поля занимают всю ширину */
+    .filters {
+        max-width: 100%; /* Фильтры занимают всю ширину */
+    }
+
+    .storiesContainer {
+        max-width: 100%; /* Истории занимают всю ширину */
     }
 }

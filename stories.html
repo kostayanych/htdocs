@@ -21,6 +21,7 @@
     <body>
         <!-- Верхняя полоска -->
         <header class="topBar">
+            <img src="/src/content/logo.png" alt="Логотип" class="logo">
             <h1>Лента историй</h1>
             <nav class="navLinks">
                 <a href="profile.html">Профиль</a>
@@ -30,26 +31,22 @@
             </nav>
         </header>
     </body>
-<main>
-    
-    <div class="filters">
-        <!-- Сортировка -->
-        <h2>Сортировать по лайкам:</h2>
-        <button id="filterLikesAscButton" class="sortButton">По возрастанию</button>
-        <button id="filterLikesDescButton" class="sortButton">По убыванию</button>
-    
-        <!-- Поля ввода для поиска -->
-        <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории" />
-        <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории" />
-        <button id="searchButton" class="searchButton">Поиск</button>
-    </div>
-    
-    <div id="storiesContainer" class="storiesContainer"></div>
-    
-    <footer>
-        <p>&copy; 2024 Все права защищены.</p>
-    </footer>
-</main>
+    <main>
+        <div class="mainContainer">
+            <!-- Блок фильтров -->
+            <div class="filters">
+                <h2>Сортировать по лайкам:</h2>
+                <button id="filterLikesAscButton" class="sortButton">По возрастанию</button>
+                <button id="filterLikesDescButton" class="sortButton">По убыванию</button>
+            
+                <input type="text" id="searchInputName" class="searchInputName" placeholder="Поиск по автору истории" />
+                <input type="text" id="searchInputTitle" class="searchInputTitle" placeholder="Поиск по названию истории" />
+                <button id="searchButton" class="searchButton">Поиск</button>
+            </div>
+            <div id="storiesContainer" class="storiesContainer">
+            </div>
+        </div>
+    </main>
 
 <script>
     window.onload = () => {
@@ -120,5 +117,8 @@
         });
     }
 </script>
+<footer>
+    <p>&copy; 2024 Искренний сервис. Все права защищены.</p>
+</footer>
 </body>
 </html>

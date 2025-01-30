@@ -58,9 +58,41 @@ async function loadStories(filters = {}) {
             const storyElement = document.createElement('div');
             storyElement.classList.add('storyCard');
             storyElement.innerHTML = `
-                <h3>${story.name}</h3>
-                <p>Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</p>
-                <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
+            <style>
+                textarea[id^="commentInput"] {
+                    font-family: 'Gerbera', sans-serif; /* Шрифт */
+                    width: 100%; /* Ширина текстовой области */
+                    height: 75px; /* Высота текстовой области */
+                    padding: 20px; /* Внутренние отступы */
+                    box-sizing: border-box; /* Учитываем отступы в ширине и высоте */
+                    max-width: 120x; /* Максимальная ширина 60 пикселей */
+                    resize: none; /* Запретить изменение размера текстового поля */
+                    border: 1px solid #ccc; /* Граница */
+                    border-radius: 30px; /* Скругленные углы */
+                    font-size: 14px; /* Размер шрифта */
+                }
+                .custom-button {
+                    background-color: #165849; /* Цвет фона (например, зеленый) */
+                    color: white; /* Цвет текста */
+                    font-family: 'Gerbera', sans-serif; /* Шрифт */
+                    font-size: 14px; /* Размер шрифта */
+                    padding: 10px 20px; /* Внутренние отступы */
+                    border: none; /* Убираем стандартную границу */
+                    border-radius: 30px; /* Скругленные углы */
+                    cursor: pointer; /* Курсор при наведении */
+                    transition: background-color 0.3s; /* Плавный переход цвета */
+                }
+
+                .custom-button:hover {
+                    background-color: #800036; /* Цвет фона при наведении */
+                }
+            </style>
+                <div class="storyCard.mainContainer">
+                <!-- Заголовок с датой -->
+                <div class="header">
+                    <h3>${story.name}</h3>
+                    <span class="date">Дата: ${new Date(story.date).toLocaleDateString()}</span>
+                </div>
                 <div class="descriptionContainer">
                     <span>Описание:</span>
                     <p>${story.desc}</p>
@@ -69,17 +101,28 @@ async function loadStories(filters = {}) {
                     <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
                     <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike('${story._id}')" style="cursor: pointer; width: 20px; height: 20px;">
                     <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length || 0}</span>
+                    
                     <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment('${story._id}')" style="cursor: pointer; width: 20px; height: 20px;">
+                    <div class="author">Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</div>
                 </div>
                 <div class="commentsContainer" id="commentsContainer-${story._id}" style="display: none;">
                     <h4>Комментарии:</h4>
-                    <div class="commentsList" id="commentsList-${story._id}">
-                        ${story.comments.map(comment => `<p>${comment.content}</p>`).join('')}
+                   <div class="commentsList" id="commentsList-${story._id}">
+                   <p>
+                        ${story.comments.map(comment => `
+                        <strong class="comment-author">${comment.author.name} ${comment.author.surname}</strong><br>
+                                <span>${comment.content}</span>
+                            </p>
+                            <hr>
+                        `).join('')}
+                    </div>
                     </div>
                     <textarea id="commentInput-${story._id}" placeholder="Введите ваш комментарий..."></textarea>
-                    <button onclick="addComment('${story._id}')">Добавить комментарий</button>
-                </div>
-            `;
+                    
+                    <button class="custom-button" onclick="addComment('${story._id}')">Добавить комментарий</button>
+                    
+  
+            </div>`;
             storiesContainer.appendChild(storyElement);
             //console.log(story.comments);
         });
@@ -107,24 +150,29 @@ async function addComment(storyId) {
         alert('Пожалуйста, введите комментарий.');
         return;
     }
+    const name = localStorage.getItem('name') || 'Не указано';
+    const surname = localStorage.getItem('surname') || 'Не указано';
+    const email = localStorage.getItem('email') || 'Не указано';
+    const birthday = localStorage.getItem('birthday') || 'Не указано';
+
+    const positionObj = JSON.parse(localStorage.getItem('position')) || {}; 
+    let positionText = 'Не указано';
     
+    if (positionObj && positionObj.department && positionObj.position && positionObj.cmd) {
+        positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
+    }
     // Создаем объект автора
     const author = {
-        name: 'TestNAME1', // Имя автора
-        surname: 'TestSURNAME1', // Фамилия автора
-        lastName: 'TestLASTNAME1', // Отчество автора
-        position: {
-            department: 'test department',
-            position: 'test position',
-            cmd: 'test cmd'
-        }
+        name: name, // Имя автора
+        surname: surname, // Фамилия автора
+        position: positionObj
     };
 
     // Создаем объект комментария
     const newComment = {
         date: new Date().toISOString(), // Получаем текущую дату в формате ISO
         author: author,
-        content: commentText + '\nКомментарий был оставлен - ' + author.name + ' ' + author.surname // Содержимое комментария
+        content: commentText // Содержимое комментария
     };
 
     const comments = [];
@@ -154,7 +202,13 @@ async function addComment(storyId) {
 
         // Добавляем комментарий в список комментариев на клиенте
         const commentsList = document.getElementById(`commentsList-${storyId}`);
-        commentsList.innerHTML += `<div>${commentText}</div><div>Комментарий был оставлен - ${author.name} ${author.surname}</div>`; // Используем <div> для разделения строк
+        commentsList.innerHTML += `
+        <p class="comment">
+            <span class="comment-author"><strong>${author.name} ${author.surname}</strong><br></span>
+            <span class="comment-content">${commentText}</span>
+        </p>
+        <hr> <!-- Добавляем горизонтальную линию после комментария -->
+    `; 
         commentInput.value = ''; // Очищаем текстовое поле
 
     } catch (error) {
@@ -269,5 +323,5 @@ function parseJwt(token) {
 
 function logout() {
     localStorage.clear();
-    window.location.href = 'login.html';  // Редиректим на страницу логина
+    window.location.href = 'index.html';  // Редиректим на страницу логина
 }

@@ -9,9 +9,18 @@
         .cke_notifications_area {
         display: none !important;
         }
+        @font-face {
+        font-family: 'Gerbera';
+        src: url('../fonts/gerbera.eot'); /* IE 9 Compatibility Mode */
+        src: url('../fonts/gerbera.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+            url('../fonts/gerbera.woff2') format('woff2'), /* Super Modern Browsers */
+            url('../fonts/gerbera.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+            url('../fonts/gerbera.ttf') format('truetype'), /* Safari, Android, iOS */
+            url('../fonts/gerbera.svg#gerbera') format('svg'); /* Chrome < 4, Legacy iOS */
+        }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Gerbera', sans-serif;
             background-color: #f8f9fa;
             margin: 0;
             display: flex;
@@ -62,10 +71,10 @@
 </head>
 <body>
     <h1>Создать новую историю</h1>
-    <form id="createStoryForm" method="post" action="http://localhost:3000/api/stories/create">
+    <form id="createStoryForm" method="post" action="http://localhost:5500/api/stories/create">
         <input name="title" type="text" placeholder="Название истории" required>
         <textarea name="content" id="editor" placeholder="Текст истории" required></textarea>
-        <button type="submit">Опубликовать</button>
+        <button type="submit" onclick="to_stories()">Опубликовать</button>
     </form>
 
     <script>
@@ -134,6 +143,10 @@
         } catch (error) {
             console.error('Ошибка при создании истории:', error);
         }
+    }
+    async function to_stories() {
+        alert('История успешно создана!');
+        window.location.href = 'stories.html';
     }
     
         
