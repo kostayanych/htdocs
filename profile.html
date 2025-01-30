@@ -125,6 +125,51 @@
 
             function closeModal(modalId) {
                 document.getElementById(modalId).style.display = 'none';
+
+                // Если это модальное окно редактирования поля или должности, отправляем запрос в БД
+                if (modalId === 'editFieldModal' || modalId === 'editPositionModal') {
+                    const userId = localStorage.getItem('id'); // Получаем ID пользователя из localStorage
+                    const updatedData = {};
+
+                    if (modalId === 'editFieldModal' && currentFieldType) {
+                        const newValue = document.getElementById('newValue').value;
+                        updatedData[currentFieldType] = newValue;
+                    } else if (modalId === 'editPositionModal') {
+                        updatedData.position = {
+                            department: document.getElementById('department').value,
+                            cmd: document.getElementById('cmd').value,
+                            position: document.getElementById('position').value,
+                        };
+                    }
+                    const protocol = 'http'; // или 'https'
+                    const host = 'localhost'; // замените на ваш хост
+                    const port = '5500'; // замените на ваш порт
+
+                    const url = `${protocol}://${host}:${port}/api/users`;
+
+                    // Отправляем запрос на сервер
+                    fetch(`${url}/updateById/${userId}`, {
+                        method: 'POST', // Используем метод POST
+                        headers: {
+                            'Content-Type': 'application/json', // Указываем, что данные передаются в формате JSON
+                        },
+                        body: JSON.stringify(updatedData), // Преобразуем данные в JSON
+                    })
+                    .then((response) => {
+                        //if (response.ok) {
+                           // return response.json();
+                       // }
+                        //throw new Error('Ошибка при обновлении данных пользователя');
+                    })
+                    .then((data) => {
+                        //console.log('Данные успешно обновлены:', data);
+                        //alert('Данные успешно сохранены в БД!');
+                    })
+                    .catch((error) => {
+                        //console.error('Произошла ошибка:', error);
+                        //alert('Ошибка при обновлении данных!');
+                    });
+                }
             }
 
             document.getElementById('saveFieldButton').addEventListener('click', () => {
