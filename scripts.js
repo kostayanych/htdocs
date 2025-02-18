@@ -34,6 +34,11 @@ async function getStoryById(storyId) {
 // Fetch and display stories
 let likedStories = new Set(); // Множество для отслеживания, какие истории были лайкнуты
 
+// Функция для экранирования HTML-тегов
+function escapeHtml(unsafe) {
+    return unsafe.replace(/<[^>]*>/g, '');
+}
+
 async function loadStories(filters = {}) {
     try {
         const params = new URLSearchParams(filters).toString();
@@ -57,6 +62,11 @@ async function loadStories(filters = {}) {
         stories.forEach(story => {
             const storyElement = document.createElement('div');
             storyElement.classList.add('storyCard');
+            // Экранируем описание
+            const safeDesc = escapeHtml(story.desc);
+            const shortDesc = safeDesc.length > 300 ? safeDesc.slice(0, 300) + '...' : safeDesc;
+            const showMoreButton = safeDesc.length > 300 ? `<button class="custom-button" onclick="toggleFullDesc('${story._id}')">Показать ещё</button>` : '';
+
             storyElement.innerHTML = `
             <style>
                 textarea[id^="commentInput"] {
@@ -90,12 +100,13 @@ async function loadStories(filters = {}) {
                 <div class="storyCard.mainContainer">
                 <!-- Заголовок с датой -->
                 <div class="header">
-                    <h3>${story.name}</h3>
+                    <h3>${escapeHtml(story.name)}</h3>
                     <span class="date">Дата: ${new Date(story.date).toLocaleDateString()}</span>
                 </div>
                 <div class="descriptionContainer">
-                    <span>Описание:</span>
-                    <p>${story.desc}</p>
+                    <p id="desc-${story._id}">${shortDesc}</p>
+                    ${showMoreButton}
+                    <p id="fullDesc-${story._id}" style="display: none;">${safeDesc}</p>
                 </div>
                 <div class="buttonContainer">
                     <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
@@ -103,15 +114,15 @@ async function loadStories(filters = {}) {
                     <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length || 0}</span>
                     
                     <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment('${story._id}')" style="cursor: pointer; width: 20px; height: 20px;">
-                    <div class="author">Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</div>
+                    <div class="author">Автор: ${escapeHtml(story.author ? story.author.name : 'Неизвестен')} ${escapeHtml(story.author ? story.author.surname : '')}</div>
                 </div>
                 <div class="commentsContainer" id="commentsContainer-${story._id}" style="display: none;">
                     <h4>Комментарии:</h4>
                    <div class="commentsList" id="commentsList-${story._id}">
                    <p>
                         ${story.comments.map(comment => `
-                        <strong class="comment-author">${comment.author.name} ${comment.author.surname}</strong><br>
-                                <span>${comment.content}</span>
+                        <strong class="comment-author">${escapeHtml(comment.author.name)} ${escapeHtml(comment.author.surname)}</strong><br>
+                                <span>${escapeHtml(comment.content)}</span>
                             </p>
                             <hr>
                         `).join('')}
@@ -120,16 +131,29 @@ async function loadStories(filters = {}) {
                     <textarea id="commentInput-${story._id}" placeholder="Введите ваш комментарий..."></textarea>
                     
                     <button class="custom-button" onclick="addComment('${story._id}')">Добавить комментарий</button>
-                    
-  
-            </div>`;
+                </div>`;
             storiesContainer.appendChild(storyElement);
-            //console.log(story.comments);
         });
     } catch (error) {
         console.error('Ошибка загрузки историй:', error);
     }
-    
+}
+
+// Функция для переключения полного описания
+function toggleFullDesc(storyId) {
+    const shortDesc = document.getElementById(`desc-${storyId}`);
+    const fullDesc = document.getElementById(`fullDesc-${storyId}`);
+    const showMoreButton = shortDesc.nextElementSibling;
+
+    if (fullDesc.style.display === 'none') {
+        fullDesc.style.display = 'block';
+        shortDesc.style.display = 'none';
+        showMoreButton.textContent = 'Скрыть';
+    } else {
+        fullDesc.style.display = 'none';
+        shortDesc.style.display = 'block';
+        showMoreButton.textContent = 'Показать ещё';
+    }
 }
 
 function toggleComment(storyId) {

@@ -27,7 +27,7 @@ body::before {
     background-image: url('/src/content/pattern.png'); /* Путь к вашему изображению */
     background-repeat: repeat; /* Повторяем изображение */
     background-size: auto; /* Автоматический размер */
-    opacity: 0.5; /* Прозрачность изображения (0.0 - 1.0) */
+    opacity: 0.3; /* Прозрачность изображения (0.0 - 1.0) */
     z-index: -1; /* Помещаем на задний план */
 }
 

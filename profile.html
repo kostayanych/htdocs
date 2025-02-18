@@ -34,7 +34,11 @@
                 <p><strong>Должность:</strong> <span id="userPosition"></span>
                     <button class="editButton" onclick="editPosition(event)">Изменить</button>
                 </p>
-                
+                <p>
+                    <strong>Фото профиля:</strong> 
+                    <img id="userPhoto" src="/src/logos/default-profile.png" alt="Фото профиля" class="profilePhoto">
+                    <button class="editButton" onclick="openModal('uploadPhotoModal')">Загрузить фото</button>
+                </p>
             </div>
         </section>
 
@@ -55,13 +59,31 @@
             <input type="text" id="cmd" placeholder="Введите ЦМД" /><br>
             <label for="position">Должность:</label>
             <input type="text" id="position" placeholder="Введите должность" />
-            <button id="savePositionButton" class = "saveButton">Сохранить</button>
-            <button onclick="closeModal('editPositionModal')"  class = "cancelButton">Отмена</button>
+            <button id="savePositionButton" class="saveButton">Сохранить</button>
+            <button onclick="closeModal('editPositionModal')" class="cancelButton">Отмена</button>
+        </div>
+
+        <!-- Модальное окно для загрузки фото -->
+        <div id="uploadPhotoModal" class="modal">
+            <h3>Загрузить фото профиля</h3>
+            <form id="uploadPhotoForm">
+                <label for="photoInput">Выберите файл:</label>
+                <input type="file" id="photoInput" accept="image/*">
+                <button type="button" class="saveButton" onclick="uploadPhoto()">Загрузить</button>
+                <button type="button" class="cancelButton" onclick="closeModal('uploadPhotoModal')">Отмена</button>
+            </form>
         </div>
     </main>
 
 </body>
         <script>
+            
+                // Открытие модального окна
+            function openModal(modalId) {
+                document.getElementById(modalId).style.display = 'block';
+            }
+
+
             let currentField; // Хранит текущий элемент, который редактируется
             let currentFieldType; // Хранит тип поля (например, name, surname и т.д.)
 
@@ -90,7 +112,12 @@
                 return formattedDate.toISOString();
             }
 
-            function loadProfile() {
+            async function loadProfile() {
+                const userId = localStorage.getItem('id');
+                const response = await fetch(`/api/users/getById/${userId}`);
+                const data = await response.json();
+                console.log(data);
+
                 // Получаем данные из localStorage
                 const name = localStorage.getItem('name') || 'Не указано';
                 const surname = localStorage.getItem('surname') || 'Не указано';
@@ -104,12 +131,117 @@
                     positionText = `${positionObj.department}, ${positionObj.position}, ${positionObj.cmd}`;
                 }
 
+                if (response.ok){
+                    if (data.avatar) {
+                                localStorage.setItem('profilePhoto', data.avatar);
+                                document.getElementById('userPhoto').src = data.avatar;
+                            } else {
+                                // Иначе используем фото по умолчанию
+                                document.getElementById('userPhoto').src = '/src/logos/default-profile.png';
+                            }
+                        } else {
+                            console.error('Ошибка при загрузке профиля:', data.msg);
+                        }
+                
+
                 // Заполняем профиль
                 document.getElementById('userName').textContent = name;
                 document.getElementById('userSurname').textContent = surname;
                 document.getElementById('userEmail').textContent = email;
                 document.getElementById('userPosition').textContent = positionText;
                 document.getElementById('userBirthday').textContent = formatDate(birthday);
+            }
+
+            async function uploadPhoto() {
+                const photoInput = document.getElementById('photoInput');
+                const file = photoInput.files[0];
+                const userId = localStorage.getItem('id'); // Получаем ID пользователя
+
+                if (!file) {
+                    alert('Пожалуйста, выберите файл.');
+                    return;
+                }
+
+                // Создаем изображение для обработки
+                const image = new Image();
+                image.src = URL.createObjectURL(file);
+
+                // Обрабатываем изображение после загрузки
+                image.onload = async () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Устанавливаем размеры canvas для обрезки
+                    const targetWidth = 340;
+                    const targetHeight = 200;
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Вычисляем соотношение сторон изображения
+                    const imageAspectRatio = image.width / image.height;
+                    const targetAspectRatio = targetWidth / targetHeight;
+
+                    // Определяем область обрезки
+                    let sourceX = 0;
+                    let sourceY = 0;
+                    let sourceWidth = image.width;
+                    let sourceHeight = image.height;
+
+                    if (imageAspectRatio > targetAspectRatio) {
+                        // Изображение шире, чем целевой размер
+                        sourceWidth = image.height * targetAspectRatio;
+                        sourceX = (image.width - sourceWidth) / 2;
+                    } else {
+                        // Изображение выше, чем целевой размер
+                        sourceHeight = image.width / targetAspectRatio;
+                        sourceY = (image.height - sourceHeight) / 2;
+                    }
+
+                    // Обрезаем изображение и рисуем на canvas
+                    ctx.drawImage(
+                        image,
+                        sourceX, sourceY, sourceWidth, sourceHeight, // Область обрезки
+                        0, 0, targetWidth, targetHeight // Целевые размеры
+                    );
+
+                    // Преобразуем canvas в base64 (или Blob)
+                    const croppedImageBase64 = canvas.toDataURL('image/jpeg', 0.9); // Качество 90%
+
+                    // Отправляем обрезанное изображение на сервер
+                    const formData = new FormData();
+                    const blob = await fetch(croppedImageBase64).then((res) => res.blob()); // Преобразуем base64 в Blob
+                    formData.append('avatar', blob, 'avatar.jpg'); // Добавляем Blob в FormData
+
+                    try {
+                        const response = await fetch(`/api/users/updateById/${userId}`, {
+                            method: 'POST', // Или 'PUT', если ваш API использует PUT для обновления
+                            body: formData,
+                        });
+
+
+                        if (response.ok) {
+                             // Обновляем фото профиля на странице
+                            const response = await fetch(`/api/users/getById/${userId}`); // Предполагаем, что сервер сохраняет фото по этому пути
+                            const data = await response.json();
+                            const avatarUrl = data.avatar;
+                            document.getElementById('userPhoto').src = avatarUrl;
+                            localStorage.setItem('profilePhoto', avatarUrl); // Сохраняем в Local Storage
+                            closeModal('uploadPhotoModal');
+                            alert('Фото успешно загружено!');
+                        } else {
+                            alert('Ошибка загрузки фото.');
+                            console.error('Ошибка:', data.msg || 'Неизвестная ошибка');
+                        }
+                    } catch (error) {
+                        console.error('Ошибка при отправке запроса:', error);
+                        alert('Ошибка при загрузке фото.');
+                    }
+                };
+
+                // Если изображение не загрузилось
+                image.onerror = () => {
+                    alert('Ошибка при загрузке изображения.');
+                };
             }
 
             function editField(fieldId, fieldType, event) {

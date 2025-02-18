@@ -80,7 +80,7 @@
     };
 
     async function loadStoriesby(filters = {}) {
-        const response = await fetch('http://localhost:3000/api/stories/getByFilters?'); // Получаем истории из вашего API
+        const response = await fetch('http://localhost:5500/api/stories/getByFilters?'); // Получаем истории из вашего API
         const stories = await response.json(); // Преобразуем ответ в JSON
 
         // Фильтруем истории на основе переданных фильтров
@@ -100,20 +100,74 @@
 
         filteredStories.forEach(story => {
             const storyElement = document.createElement('div');
-            storyElement.classList.add('storyCard'); // Применяем класс для контуров
+            storyElement.classList.add('storyCard');
             storyElement.innerHTML = `
-                <h3>${story.name}</h3>
-                <p>Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</p>
-                <p>Дата: ${new Date(story.date).toLocaleDateString()}</p>
-                <p>Описание: ${story.desc}</p>
+            <style>
+                textarea[id^="commentInput"] {
+                    font-family: 'Gerbera', sans-serif; /* Шрифт */
+                    width: 100%; /* Ширина текстовой области */
+                    height: 75px; /* Высота текстовой области */
+                    padding: 20px; /* Внутренние отступы */
+                    box-sizing: border-box; /* Учитываем отступы в ширине и высоте */
+                    max-width: 120x; /* Максимальная ширина 60 пикселей */
+                    resize: none; /* Запретить изменение размера текстового поля */
+                    border: 1px solid #ccc; /* Граница */
+                    border-radius: 30px; /* Скругленные углы */
+                    font-size: 14px; /* Размер шрифта */
+                }
+                .custom-button {
+                    background-color: #165849; /* Цвет фона (например, зеленый) */
+                    color: white; /* Цвет текста */
+                    font-family: 'Gerbera', sans-serif; /* Шрифт */
+                    font-size: 14px; /* Размер шрифта */
+                    padding: 10px 20px; /* Внутренние отступы */
+                    border: none; /* Убираем стандартную границу */
+                    border-radius: 30px; /* Скругленные углы */
+                    cursor: pointer; /* Курсор при наведении */
+                    transition: background-color 0.3s; /* Плавный переход цвета */
+                }
+
+                .custom-button:hover {
+                    background-color: #800036; /* Цвет фона при наведении */
+                }
+            </style>
+                <div class="storyCard.mainContainer">
+                <!-- Заголовок с датой -->
+                <div class="header">
+                    <h3>${story.name}</h3>
+                    <span class="date">Дата: ${new Date(story.date).toLocaleDateString()}</span>
+                </div>
+                <div class="descriptionContainer">
+                    <p>${story.desc}</p>
+                </div>
                 <div class="buttonContainer">
                     <span class="likeCount" id="likeCount-${story._id}">${story.likesCount || 0}</span>
-                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike(${story._id})" style="cursor: pointer; width: 20px; height: 20px;">
+                    <img class="LikeButton" src="/src/icons/heart.png" alt="Like" onclick="toggleLike('${story._id}')" style="cursor: pointer; width: 20px; height: 20px;">
                     <span class="likeCount" id="commentsCount-${story._id}">${story.comments.length || 0}</span>
-                    <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment(${story._id})" style="cursor: pointer; width: 20px; height: 20px;">
+                    
+                    <img class="commentButton" src="/src/icons/chat.png" alt="Comment" onclick="toggleComment('${story._id}')" style="cursor: pointer; width: 20px; height: 20px;">
+                    <div class="author">Автор: ${story.author ? story.author.name : 'Неизвестен'} ${story.author ? story.author.surname : ''}</div>
                 </div>
-            `;
+                <div class="commentsContainer" id="commentsContainer-${story._id}" style="display: none;">
+                    <h4>Комментарии:</h4>
+                   <div class="commentsList" id="commentsList-${story._id}">
+                   <p>
+                        ${story.comments.map(comment => `
+                        <strong class="comment-author">${comment.author.name} ${comment.author.surname}</strong><br>
+                                <span>${comment.content}</span>
+                            </p>
+                            <hr>
+                        `).join('')}
+                    </div>
+                    </div>
+                    <textarea id="commentInput-${story._id}" placeholder="Введите ваш комментарий..."></textarea>
+                    
+                    <button class="custom-button" onclick="addComment('${story._id}')">Добавить комментарий</button>
+                    
+  
+            </div>`;
             storiesContainer.appendChild(storyElement);
+            //console.log(story.comments);
         });
     }
 </script>
